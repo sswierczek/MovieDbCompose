@@ -8,3 +8,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Project configuration folder
+secure/*
+!secure/template_*.properties
