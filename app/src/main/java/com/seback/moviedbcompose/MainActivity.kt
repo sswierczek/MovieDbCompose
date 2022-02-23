@@ -8,8 +8,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,6 +35,14 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(
     mainViewModel: MainViewModel = viewModel()
 ) {
-    mainViewModel.fetch()
-    Text(text = "Hello ")
+    val response = mainViewModel.result.collectAsState().value
+    if (response is Response.Success) {
+        if (response.data.isEmpty()) {
+            Text(text = "Loading")
+        } else {
+            Text(text = "Fetched data, count ${response.data.size}")
+        }
+    } else if (response is Response.Error) {
+        Text(text = "Error fetching ${response.message}")
+    }
 }

@@ -3,6 +3,7 @@ package com.seback.moviedbcompose.core.data
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.MovieDetails
 import com.seback.moviedbcompose.core.data.models.Response
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Groups data repositories.
@@ -11,7 +12,7 @@ import com.seback.moviedbcompose.core.data.models.Response
  */
 interface Repository {
     interface Discover {
-        suspend fun discover(page: Int): Response<List<Movie>>
+        suspend fun discover(page: Int): Flow<Response<List<Movie>>>
     }
 
     interface Details {

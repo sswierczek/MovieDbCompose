@@ -4,9 +4,14 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.discover.usecases.GetDiscoverMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,27 +22,22 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    fun fetch() {
+    private val _result: MutableStateFlow<Response<List<Movie>>> = MutableStateFlow(Response.Success(data = emptyList()))
+    val result: StateFlow<Response<List<Movie>>> = _result
+
+    init {
         viewModelScope.launch {
-            when (val response = getDiscoverMoviesUseCase.execute(1)) {
-                is Response.Success -> {
-                    Log.d("VMD", response.data.toString())
+            getDiscoverMoviesUseCase.execute(1)
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    Log.d("VMD","collect [${Thread.currentThread().name}]")
+                    _result.value = it
                 }
-                is Response.Error -> {
-                    Log.e("VMD", response.message ?: "empty error")
-                }
-            }
         }
     }
 
-    init {
-        Log.d("VMD", "INIT")
-    }
-
-
     override fun onCleared() {
         super.onCleared()
-
         Log.d("VMD", "onCleared")
     }
 }
