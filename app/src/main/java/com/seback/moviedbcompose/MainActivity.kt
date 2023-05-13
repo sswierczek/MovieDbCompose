@@ -3,29 +3,33 @@ package com.seback.moviedbcompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.paddingFromBaseline
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
@@ -39,24 +43,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MovieDbComposeTheme {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    MainScreen()
-                }
+                MainAppScaffold()
             }
         }
     }
 }
 
 @Composable
+fun MainAppScaffold() {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(title = {
+                Text("Movie Guide")
+            })
+        }
+    ) { contentPadding ->
+        MainScreen(Modifier.padding(contentPadding))
+    }
+}
+
+@Composable
 fun MainScreen(
-    mainViewModel: MainViewModel = viewModel()
+    modifier: Modifier = Modifier,
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
     val response = mainViewModel.result.collectAsState().value
     if (response is Response.Success) {
         if (response.data.isEmpty()) {
             Text(text = "Loading")
         } else {
-            MainGrid(movies = response.data)
+            MainGrid(modifier, movies = response.data)
         }
     } else if (response is Response.Error) {
         Text(text = "Error fetching ${response.message}")
@@ -70,13 +87,13 @@ fun MainGrid(
 ) {
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Adaptive(minSize = 96.dp)
+        contentPadding = PaddingValues(8.dp),
+        columns = GridCells.Adaptive(minSize = 160.dp)
     ) {
         items(movies) { item ->
             MovieCard(movie = item)
         }
     }
-
 }
 
 @Composable
@@ -84,30 +101,40 @@ fun MovieCard(
     movie: Movie,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        modifier = modifier,
-        shape = MaterialTheme.shapes.small
+    Card(
+        modifier = modifier
+            .padding(8.dp, 8.dp)
+            .fillMaxWidth()
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp)),
+        shape = RoundedCornerShape(8.dp)
     ) {
         Column(
-            modifier = Modifier.width(192.dp),
+            modifier = Modifier.sizeIn(minWidth = 96.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AsyncImage(
                 model = movie.imagePath,
+//                placeholder = Icons.Default.Movie,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(96.dp)
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .sizeIn(minHeight = 96.dp)
+                    .fillMaxWidth()
             )
             Text(
                 text = movie.title,
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .paddingFromBaseline(bottom = 16.dp, top = 16.dp)
+                    .padding(start = 8.dp, end = 8.dp)
             )
         }
     }
 }
 
-@Preview(widthDp = 360, heightDp = 640)
+@Preview(showBackground = true)
 @Composable
 fun MainGridPreview() {
     MovieDbComposeTheme {
@@ -145,7 +172,7 @@ fun MainGridPreview() {
                 ),
                 Movie(
                     id = 6,
-                    title = "Some movie 7",
+                    title = "Some movie 7 long text even longer than this",
                     imagePath = "https://fastly.picsum.photos/id/293/300/300.jpg?hmac=gEUIxAYywNOF5HLNxZ6xeU1FGszv7GgR4J9RXhWH5Fc"
                 )
             )

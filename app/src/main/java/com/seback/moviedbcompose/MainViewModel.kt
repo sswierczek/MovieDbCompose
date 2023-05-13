@@ -1,6 +1,5 @@
 package com.seback.moviedbcompose
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +22,8 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _result: MutableStateFlow<Response<List<Movie>>> = MutableStateFlow(Response.Success(data = emptyList()))
+    private val _result: MutableStateFlow<Response<List<Movie>>> =
+        MutableStateFlow(Response.Success(data = emptyList()))
     val result: StateFlow<Response<List<Movie>>> = _result
 
     init {
