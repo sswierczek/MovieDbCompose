@@ -1,16 +1,19 @@
 buildscript {
     ext {
-        gradle_plugin_version = '7.1.+'
-        compose_version = '1.1.+'
-        kotlin_version = '1.6.10'
-        kotlin_corutines = '1.6.0'
-        hilt_version = '2.38.1'
+        gradle_plugin_version = '8.0.1'
+        kotlin_version = '1.8.21'
+        kotlin_corutines = '1.7.1'
+        hilt_version = '2.44'
+        compose_version = '1.4.3'
     }
 
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
-
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 /**
  * You should use `apply false` in the top-level build.gradle file

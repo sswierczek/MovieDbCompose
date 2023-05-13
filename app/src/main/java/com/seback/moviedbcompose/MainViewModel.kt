@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +31,7 @@ class MainViewModel @Inject constructor(
             getDiscoverMoviesUseCase.execute(1)
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    Log.d("VMD","collect [${Thread.currentThread().name}]")
+                    Timber.d("collect [${Thread.currentThread().name}]")
                     _result.value = it
                 }
         }
@@ -38,6 +39,6 @@ class MainViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        Log.d("VMD", "onCleared")
+        Timber.d("onCleared")
     }
 }
