@@ -33,6 +33,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
@@ -45,15 +50,31 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             MovieDbComposeTheme {
-                MainAppScaffold()
+                NavHost(navController = navController, startDestination = "home") {
+                    composable("home") {
+                        MainAppScaffold(onMovieDetails = {
+                            navController.navigate("movieDetails/${it.id}")
+                        })
+                    }
+                    composable(
+                        "movieDetails/{movieId}",
+                        arguments = listOf(navArgument("movieId") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        MovieDetails(
+                            movieId = backStackEntry.arguments?.getInt("movieId")!!,
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun MainAppScaffold() {
+fun MainAppScaffold(onMovieDetails: (Movie) -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -62,13 +83,14 @@ fun MainAppScaffold() {
             })
         }
     ) { contentPadding ->
-        MainScreen(Modifier.padding(contentPadding))
+        MainScreen(Modifier.padding(contentPadding), onMovieDetails)
     }
 }
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
+    onMovieDetails: (Movie) -> Unit,
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
     val response = mainViewModel.result.collectAsState().value
@@ -76,7 +98,7 @@ fun MainScreen(
         if (response.data.isEmpty()) {
             Text(text = "Loading")
         } else {
-            MainGrid(modifier, movies = response.data)
+            MainGrid(modifier, response.data, onMovieDetails)
         }
     } else if (response is Response.Error) {
         Text(text = "Error fetching ${response.message}")
@@ -86,7 +108,8 @@ fun MainScreen(
 @Composable
 fun MainGrid(
     modifier: Modifier = Modifier,
-    movies: List<Movie>
+    movies: List<Movie>,
+    onMovieDetails: (Movie) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -94,7 +117,9 @@ fun MainGrid(
         columns = GridCells.Adaptive(minSize = 150.dp)
     ) {
         items(movies) { item ->
-            MovieCard(movie = item)
+            MovieCard(movie = item, modifier.clickable {
+                onMovieDetails(item)
+            })
         }
     }
 }
@@ -106,7 +131,6 @@ fun MovieCard(
 ) {
     Card(
         modifier = modifier
-            .clickable { }
             .padding(8.dp, 8.dp)
             .fillMaxWidth()
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp)),
@@ -194,7 +218,8 @@ fun MainGridPreview() {
                     imagePath = "",
                     voteAverage = 5.5
                 )
-            )
+            ),
+            onMovieDetails = {}
         )
     }
 }
