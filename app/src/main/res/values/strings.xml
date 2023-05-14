@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Discover movies</string>
+
+    <string name="latest">Latest</string>
+    <string name="discover">Discover</string>
+    <string name="favs">Favourites</string>
+
 </resources>

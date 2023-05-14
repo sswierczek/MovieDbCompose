@@ -17,10 +17,8 @@ import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
@@ -39,17 +37,8 @@ import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 
 @Composable
-fun DiscoverMovies(onMovieDetails: (Movie) -> Unit) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(title = {
-                Text("Discover")
-            })
-        }
-    ) { contentPadding ->
-        DiscoverMoviesContent(Modifier.padding(contentPadding), onMovieDetails)
-    }
+fun DiscoverLatestScreen(modifier: Modifier = Modifier, onMovieDetails: (Movie) -> Unit) {
+    DiscoverMoviesContent(modifier, onMovieDetails)
 }
 
 @Composable
@@ -87,7 +76,7 @@ fun DiscoverMoviesGrid(
         columns = GridCells.Adaptive(minSize = 150.dp)
     ) {
         items(movies) { item ->
-            MovieCard(movie = item, modifier.clickable {
+            MovieCard(movie = item, Modifier.clickable {
                 onMovieDetails(item)
             })
         }
