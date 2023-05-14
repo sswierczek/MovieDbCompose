@@ -1,6 +1,7 @@
 package com.seback.moviedbcompose.discover.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -59,7 +61,12 @@ fun DiscoverMoviesContent(
     val response = mainViewModel.result.collectAsState().value
     if (response is Response.Success) {
         if (response.data.isEmpty()) {
-            Text(text = "Loading")
+            Box(
+                modifier = modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         } else {
             DiscoverMoviesGrid(modifier, response.data, onMovieDetails)
         }
