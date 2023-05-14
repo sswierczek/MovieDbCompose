@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose
+package com.seback.moviedbcompose.movies.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
