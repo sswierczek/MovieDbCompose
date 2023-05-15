@@ -4,5 +4,7 @@
     <string name="latest">Latest</string>
     <string name="discover">Discover</string>
     <string name="favs">Favourites</string>
+    <string name="try_agin">TRY AGAIN</string>
+    <string name="loading_error">Error when loading</string>
 
 </resources>

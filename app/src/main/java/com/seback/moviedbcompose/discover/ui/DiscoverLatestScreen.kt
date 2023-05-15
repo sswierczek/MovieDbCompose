@@ -41,7 +41,9 @@ fun DiscoverLatestScreen(
 ) {
     val response = discoverLatestViewModel.result.collectAsState().value
 
-    LoadingContent(modifier = modifier, response) { data ->
+    LoadingContent(modifier = modifier, response, onRetry = {
+        // TODO Retry
+    }) { data ->
         DiscoverMoviesGrid(modifier, data, onMovieDetails)
     }
 }
