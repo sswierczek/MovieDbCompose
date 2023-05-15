@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose
+package com.seback.moviedbcompose.discover.vm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -16,14 +16,13 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class DiscoverLatestViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getDiscoverMoviesUseCase: GetDiscoverMoviesUseCase
 ) : ViewModel() {
 
-
     private val _result: MutableStateFlow<Response<List<Movie>>> =
-        MutableStateFlow(Response.Success(data = emptyList()))
+        MutableStateFlow(Response.Loading(initialData = emptyList()))
     val result: StateFlow<Response<List<Movie>>> = _result
 
     init {

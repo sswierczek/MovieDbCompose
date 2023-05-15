@@ -2,6 +2,10 @@ package com.seback.moviedbcompose.core.data.models
 
 sealed class Response<T> {
 
+    data class Loading<T>(
+        val initialData: T
+    ) : Response<T>()
+
     data class Success<T>(
         val data: T
     ) : Response<T>()
