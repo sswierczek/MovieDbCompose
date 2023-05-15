@@ -34,12 +34,7 @@ import com.seback.moviedbcompose.ui.common.LoadingContent
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 
 @Composable
-fun DiscoverLatestScreen(modifier: Modifier = Modifier, onMovieDetails: (Movie) -> Unit) {
-    DiscoverMoviesContent(modifier, onMovieDetails)
-}
-
-@Composable
-fun DiscoverMoviesContent(
+fun DiscoverLatestScreen(
     modifier: Modifier = Modifier,
     onMovieDetails: (Movie) -> Unit,
     discoverLatestViewModel: DiscoverLatestViewModel = hiltViewModel()
