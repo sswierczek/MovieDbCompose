@@ -3,7 +3,6 @@ package com.seback.moviedbcompose.discover.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
@@ -12,12 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -31,6 +25,7 @@ import coil.compose.AsyncImage
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.discover.vm.DiscoverLatestViewModel
 import com.seback.moviedbcompose.ui.common.LoadingContent
+import com.seback.moviedbcompose.ui.common.Rating
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 
 @Composable
@@ -85,7 +80,7 @@ fun MovieCard(
         ) {
             Surface(shape = RoundedCornerShape(8.dp)) {
                 AsyncImage(
-                    model = movie.imagePath,
+                    model = movie.posterPath,
                     contentDescription = null,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
@@ -93,22 +88,10 @@ fun MovieCard(
                         .fillMaxWidth()
                 )
             }
-            Row(
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Default.Star,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.secondary
-                )
-                Text(
-                    text = "${movie.voteAverage}",
-                    style = MaterialTheme.typography.subtitle2,
-                )
-            }
+            Rating(
+                Modifier.align(Alignment.Start),
+                vote = movie.voteAverage
+            )
         }
     }
 }
@@ -122,43 +105,43 @@ fun MainGridPreview() {
                 Movie(
                     id = 0,
                     title = "Movie Some 1",
-                    imagePath = "",
+                    posterPath = "",
                     voteAverage = 5.5
                 ),
                 Movie(
                     id = 1,
                     title = "Some movie 2",
-                    imagePath = "",
+                    posterPath = "",
                     voteAverage = 5.5
                 ),
                 Movie(
                     id = 2,
                     title = "Some movie 3",
-                    imagePath = "",
+                    posterPath = "",
                     voteAverage = 5.5
                 ),
                 Movie(
                     id = 3,
                     title = "Some movie 4",
-                    imagePath = "",
+                    posterPath = "",
                     voteAverage = 5.5
                 ),
                 Movie(
                     id = 4,
                     title = "Some movie 5",
-                    imagePath = "",
+                    posterPath = "",
                     voteAverage = 5.5
                 ),
                 Movie(
                     id = 5,
                     title = "Some movie 6",
-                    imagePath = "",
+                    posterPath = "",
                     voteAverage = 5.5
                 ),
                 Movie(
                     id = 6,
                     title = "Some movie 7 long text even longer than this",
-                    imagePath = "",
+                    posterPath = "",
                     voteAverage = 5.5
                 )
             ),

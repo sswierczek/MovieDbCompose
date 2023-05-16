@@ -1,6 +1,5 @@
 package com.seback.moviedbcompose.discover.data
 
-import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.data.models.Movie

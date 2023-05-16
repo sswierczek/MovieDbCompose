@@ -6,6 +6,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
+val ratingStyle = TextStyle(
+    fontWeight = FontWeight.Medium,
+    fontSize = 14.sp,
+    letterSpacing = 0.1.sp
+)
+
 // Set of Material typography styles to start with
 val Typography = Typography(
     body1 = TextStyle(

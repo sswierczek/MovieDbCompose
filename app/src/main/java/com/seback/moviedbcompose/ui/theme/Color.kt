@@ -16,3 +16,5 @@ val accentVariantDark = Color(0xFFff9e02)
 
 val surfaceDark = Color(0xFF343434)
 val backgroundDark = Color(0xFF212121)
+
+val ratingColor = Color(0xFFFFC107)
