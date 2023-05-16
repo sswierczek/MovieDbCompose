@@ -26,6 +26,19 @@ class DiscoverLatestViewModel @Inject constructor(
     val result: StateFlow<Response<List<Movie>>> = _result
 
     init {
+        fetchData()
+    }
+
+    fun retry() {
+        fetchData()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Timber.d("onCleared")
+    }
+
+    private fun fetchData() {
         viewModelScope.launch {
             getDiscoverMoviesUseCase.execute(1)
                 .flowOn(Dispatchers.IO)
@@ -34,10 +47,5 @@ class DiscoverLatestViewModel @Inject constructor(
                     _result.value = it
                 }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Timber.d("onCleared")
     }
 }
