@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose.discover.ui
+package com.seback.moviedbcompose.discover
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.seback.moviedbcompose.core.data.models.Movie
-import com.seback.moviedbcompose.discover.vm.DiscoverLatestViewModel
 import com.seback.moviedbcompose.ui.common.LoadingContent
 import com.seback.moviedbcompose.ui.common.Rating
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme

@@ -12,10 +12,12 @@ import kotlinx.coroutines.flow.Flow
  */
 interface Repository {
     interface Discover {
+        suspend fun latest(page: Int): Flow<Response<List<Movie>>>
+
         suspend fun discover(page: Int): Flow<Response<List<Movie>>>
     }
 
     interface Details {
-        suspend fun fetch(id: Int): Response<MovieDetails>
+        suspend fun fetch(id: Int): Flow<Response<MovieDetails>>
     }
 }

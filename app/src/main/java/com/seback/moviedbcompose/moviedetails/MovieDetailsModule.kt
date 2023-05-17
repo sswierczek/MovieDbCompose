@@ -1,9 +1,9 @@
-package com.seback.moviedbcompose.discover
+package com.seback.moviedbcompose.moviedetails
 
 import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.network.NetworkConfig
-import com.seback.moviedbcompose.discover.data.DiscoverRepository
-import com.seback.moviedbcompose.discover.usecases.GetDiscoverMoviesUseCase
+import com.seback.moviedbcompose.moviedetails.data.MovieDetailsRepository
+import com.seback.moviedbcompose.moviedetails.usecases.GetMovieDetailsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,18 +13,18 @@ import retrofit2.Retrofit
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object DiscoverModule {
+object MovieDetailsModule {
 
     @Provides
     @ViewModelScoped
     fun provideDiscoverRepository(
         retrofit: Retrofit,
         networkConfig: NetworkConfig
-    ): Repository.Discover =
-        DiscoverRepository(retrofit = retrofit, networkConfig = networkConfig)
+    ): Repository.Details =
+        MovieDetailsRepository(retrofit = retrofit, networkConfig = networkConfig)
 
     @Provides
     @ViewModelScoped
-    fun provideGetDiscoverMoviesUseCase(repository: Repository.Discover) =
-        GetDiscoverMoviesUseCase(repository = repository)
+    fun provideGetDiscoverMoviesUseCase(repository: Repository.Details) =
+        GetMovieDetailsUseCase(repository = repository)
 }

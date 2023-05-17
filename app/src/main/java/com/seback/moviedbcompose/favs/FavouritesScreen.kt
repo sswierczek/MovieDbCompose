@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose.favs.ui
+package com.seback.moviedbcompose.favs
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

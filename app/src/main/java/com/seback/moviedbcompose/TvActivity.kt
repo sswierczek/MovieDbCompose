@@ -25,7 +25,7 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
-import com.seback.moviedbcompose.discover.vm.DiscoverLatestViewModel
+import com.seback.moviedbcompose.discover.DiscoverLatestViewModel
 import com.seback.moviedbcompose.ui.common.Rating
 import dagger.hilt.android.AndroidEntryPoint
 

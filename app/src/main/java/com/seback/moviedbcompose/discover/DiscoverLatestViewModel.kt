@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose.discover.vm
+package com.seback.moviedbcompose.discover
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -12,13 +12,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverLatestViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getDiscoverMoviesUseCase: GetDiscoverMoviesUseCase
+    private val getUseCase: GetDiscoverMoviesUseCase
 ) : ViewModel() {
 
     private val _result: MutableStateFlow<Response<List<Movie>>> =
@@ -33,17 +32,11 @@ class DiscoverLatestViewModel @Inject constructor(
         fetchData()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.d("onCleared")
-    }
-
     private fun fetchData() {
         viewModelScope.launch {
-            getDiscoverMoviesUseCase.execute(1)
+            getUseCase.execute(1)
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    Timber.d("collect [${Thread.currentThread().name}]")
                     _result.value = it
                 }
         }

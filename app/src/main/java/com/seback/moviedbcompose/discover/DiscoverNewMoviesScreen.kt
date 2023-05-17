@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose.discover.ui
+package com.seback.moviedbcompose.discover
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

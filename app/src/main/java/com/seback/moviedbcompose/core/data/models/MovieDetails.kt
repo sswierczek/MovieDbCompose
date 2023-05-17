@@ -4,10 +4,10 @@ import com.seback.moviedbcompose.core.data.api.ApiMovieDetails
 import com.seback.moviedbcompose.core.data.api.ApiMovieVideo
 
 data class MovieDetails(
-    val id: Int,
-    val title: String,
-    val imagePath: String,
-    val vote: String,
+    val id: Int = 0,
+    val title: String = "",
+    val imagePath: String = "",
+    val vote: String = "",
     val youTubeVideosIds: List<String> = emptyList()
 )
 

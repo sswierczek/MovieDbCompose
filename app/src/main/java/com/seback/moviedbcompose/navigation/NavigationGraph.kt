@@ -7,10 +7,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.seback.moviedbcompose.discover.ui.DiscoverLatestScreen
-import com.seback.moviedbcompose.discover.ui.DiscoverNewMoviesScreen
-import com.seback.moviedbcompose.favs.ui.FavouritesScreen
-import com.seback.moviedbcompose.movies.ui.MovieDetailsScreen
+import com.seback.moviedbcompose.discover.DiscoverLatestScreen
+import com.seback.moviedbcompose.discover.DiscoverNewMoviesScreen
+import com.seback.moviedbcompose.favs.FavouritesScreen
+import com.seback.moviedbcompose.moviedetails.MovieDetailsScreen
+
+const val ARGUMENT_MOVIE_ID = "movieId"
 
 @Composable
 fun NavigationGraph(
@@ -34,12 +36,11 @@ fun NavigationGraph(
             FavouritesScreen(modifier)
         }
         composable(
-            "movieDetails/{movieId}",
-            arguments = listOf(navArgument("movieId") { type = NavType.IntType })
-        ) { backStackEntry ->
+            "movieDetails/{$ARGUMENT_MOVIE_ID}",
+            arguments = listOf(navArgument(ARGUMENT_MOVIE_ID) { type = NavType.IntType })
+        ) {
             MovieDetailsScreen(
                 modifier = modifier,
-                movieId = backStackEntry.arguments?.getInt("movieId")!!,
                 onBack = { navController.popBackStack() }
             )
         }

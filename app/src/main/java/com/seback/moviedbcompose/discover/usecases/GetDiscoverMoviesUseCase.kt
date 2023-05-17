@@ -10,6 +10,6 @@ class GetDiscoverMoviesUseCase(
 ) {
 
     suspend fun execute(page: Int): Flow<Response<List<Movie>>> {
-        return repository.discover(page)
+        return repository.latest(page)
     }
 }
