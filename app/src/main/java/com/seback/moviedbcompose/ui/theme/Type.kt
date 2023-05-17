@@ -20,7 +20,7 @@ val Typography = Typography(
         fontSize = 16.sp
     ),
     subtitle1 = TextStyle(
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Light,
         fontSize = 16.sp,
         letterSpacing = 0.15.sp
     ),

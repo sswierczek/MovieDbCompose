@@ -88,7 +88,9 @@ fun MovieCard(
                 )
             }
             Rating(
-                Modifier.align(Alignment.Start),
+                Modifier
+                    .padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
+                    .align(Alignment.Start),
                 vote = movie.voteAverage
             )
         }

@@ -16,7 +16,7 @@ import com.seback.moviedbcompose.ui.theme.ratingStyle
 @Composable
 fun Rating(modifier: Modifier, vote: Double) {
     Row(
-        modifier = modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -25,7 +25,8 @@ fun Rating(modifier: Modifier, vote: Double) {
             tint = ratingColor
         )
         Text(
-            text = "$vote",
+            modifier = Modifier.padding(start = 4.dp),
+            text = String.format("%.1f", vote),
             style = ratingStyle,
         )
     }
