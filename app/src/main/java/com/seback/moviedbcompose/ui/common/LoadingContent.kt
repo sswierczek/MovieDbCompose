@@ -5,9 +5,23 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 
+@Composable
+fun LoadingContentLazy(
+    modifier: Modifier,
+    response: LazyPagingItems<*>,
+    onRetry: () -> Unit,
+) {
+    when (response.loadState.refresh) {
+        is LoadState.Loading -> Loading(modifier)
+        is LoadState.Error -> ErrorDisplay(modifier, message = "", onRetry = onRetry)
+        else -> {}
+    }
+}
 
 @Composable
 fun <T> LoadingContent(

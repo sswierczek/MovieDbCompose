@@ -8,24 +8,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.seback.moviedbcompose.core.data.models.Movie
-import com.seback.moviedbcompose.ui.common.LoadingContent
+import com.seback.moviedbcompose.ui.common.LoadingContentLazy
 import com.seback.moviedbcompose.ui.common.Rating
-import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 
 @Composable
 fun DiscoverLatestScreen(
@@ -33,30 +31,33 @@ fun DiscoverLatestScreen(
     onMovieDetails: (Movie) -> Unit,
     discoverLatestViewModel: DiscoverLatestViewModel = hiltViewModel()
 ) {
-    val response = discoverLatestViewModel.result.collectAsState().value
+    val moviesLazy: LazyPagingItems<Movie> =
+        discoverLatestViewModel.moviesPager.collectAsLazyPagingItems()
 
-    LoadingContent(modifier = modifier, response, onRetry = {
-        discoverLatestViewModel.retry()
-    }) { data ->
-        DiscoverMoviesGrid(modifier, data, onMovieDetails)
-    }
+    LoadingContentLazy(modifier = modifier, response = moviesLazy, onRetry = {
+        moviesLazy.retry()
+    })
+    DiscoverMoviesGrid(modifier, moviesLazy, onMovieDetails)
 }
 
 @Composable
 fun DiscoverMoviesGrid(
     modifier: Modifier = Modifier,
-    movies: List<Movie>,
-    onMovieDetails: (Movie) -> Unit
+    movies: LazyPagingItems<Movie>,
+    onMovieDetails: (Movie) -> Unit,
 ) {
     LazyVerticalGrid(
         modifier = modifier,
         contentPadding = PaddingValues(8.dp),
         columns = GridCells.Adaptive(minSize = 150.dp)
     ) {
-        items(movies) { item ->
-            MovieCard(movie = item, Modifier.clickable {
-                onMovieDetails(item)
-            })
+        items(movies.itemCount)
+        { index ->
+            movies[index]?.let { item ->
+                MovieCard(movie = item, Modifier.clickable {
+                    onMovieDetails(item)
+                })
+            }
         }
     }
 }
@@ -96,7 +97,7 @@ fun MovieCard(
         }
     }
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun MainGridPreview() {
@@ -150,3 +151,4 @@ fun MainGridPreview() {
         )
     }
 }
+*/

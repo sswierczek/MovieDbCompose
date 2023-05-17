@@ -52,6 +52,7 @@ class TvActivity : ComponentActivity() {
     fun MainTvScreen(
     ) {
         val viewModel: DiscoverLatestViewModel = hiltViewModel()
+        viewModel.fetch()
         val response = viewModel.result.collectAsState().value
 
         // TODO Handle errors
