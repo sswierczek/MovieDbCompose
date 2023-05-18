@@ -13,7 +13,15 @@ data class MovieDetails(
     val vote: Double = 0.0,
     val releaseDate: LocalDate = LocalDate.parse("1999-01-01"),
     val youTubeVideosIds: List<String> = emptyList()
-)
+) {
+    fun toMovie() = Movie(
+        id,
+        title,
+        posterPath,
+        backdropPath,
+        vote
+    )
+}
 
 fun ApiMovieDetails.map(videos: List<ApiMovieVideo>): MovieDetails =
     MovieDetails(

@@ -7,12 +7,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.seback.moviedbcompose.latest.DiscoverLatestScreen
 import com.seback.moviedbcompose.discover.DiscoverNewMoviesScreen
 import com.seback.moviedbcompose.favs.FavouritesScreen
+import com.seback.moviedbcompose.latest.DiscoverLatestScreen
 import com.seback.moviedbcompose.moviedetails.MovieDetailsScreen
 
 const val ARGUMENT_MOVIE_ID = "movieId"
+const val ARGUMENT_MOVIE_DETAILS = "movieDetails"
 
 @Composable
 fun NavigationGraph(
@@ -26,14 +27,16 @@ fun NavigationGraph(
     ) {
         composable(BottomNavigationItem.Latest.route) {
             DiscoverLatestScreen(modifier, onMovieDetails = {
-                navController.navigate("movieDetails/${it.id}")
+                navController.navigate("$ARGUMENT_MOVIE_DETAILS/${it.id}")
             })
         }
         composable(BottomNavigationItem.Discover.route) {
             DiscoverNewMoviesScreen(modifier)
         }
         composable(BottomNavigationItem.Favourites.route) {
-            FavouritesScreen(modifier)
+            FavouritesScreen(modifier, onMovieDetails = {
+                navController.navigate("$ARGUMENT_MOVIE_DETAILS/${it.id}")
+            })
         }
         composable(
             "movieDetails/{$ARGUMENT_MOVIE_ID}",

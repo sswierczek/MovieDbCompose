@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
  */
 interface Repository {
     interface Discover {
+        suspend fun withIds(moviesIds: List<Int>): Flow<Response<List<Movie>>>
+
         suspend fun latest(page: Int): Flow<Response<List<Movie>>>
 
         suspend fun discover(page: Int): Flow<Response<List<Movie>>>

@@ -6,5 +6,5 @@
     <string name="favs">Favourites</string>
     <string name="try_agin">TRY AGAIN</string>
     <string name="loading_error">Error when loading</string>
-
+    <string name="no_data">There is nothing here</string>
 </resources>

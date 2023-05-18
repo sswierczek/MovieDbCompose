@@ -34,9 +34,11 @@ fun MovieDetailsScreen(modifier: Modifier, onBack: () -> Unit) {
     val viewModel: MovieDetailsViewModel = hiltViewModel()
     val response = viewModel.result.collectAsState().value
     val isFav = viewModel.isFav.collectAsState().value
-    LoadingContent(modifier = modifier, response = response, onRetry = {
-        viewModel.retry()
-    }) {
+    LoadingContent(modifier = modifier,
+        response = response,
+        isEmptyCheck = { false },
+        onRetry = { viewModel.retry() }
+    ) {
         MovieDetails(
             modifier = modifier,
             movieDetails = it,

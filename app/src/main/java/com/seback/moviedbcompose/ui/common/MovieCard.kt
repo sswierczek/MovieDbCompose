@@ -28,7 +28,8 @@ fun MovieCard(
     modifier: Modifier = Modifier,
     movie: Movie,
     isFav: Boolean = false,
-    onFavClick: (Int) -> Unit = {}
+    onFavClick: (Int) -> Unit = {},
+    showFavIcon: Boolean = true
 ) {
 
     Card(
@@ -62,7 +63,9 @@ fun MovieCard(
                     vote = movie.voteAverage
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                FavouriteButton(movieId = movie.id, isFav = isFav, onFavClick = onFavClick)
+                if (showFavIcon) {
+                    FavouriteButton(movieId = movie.id, isFav = isFav, onFavClick = onFavClick)
+                }
             }
         }
     }

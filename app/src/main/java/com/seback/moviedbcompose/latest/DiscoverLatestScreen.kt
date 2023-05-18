@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -34,7 +33,7 @@ fun DiscoverLatestScreen(
         modifier = modifier,
         movies = moviesLazy,
         onMovieDetails = onMovieDetails,
-        favs = favs,
+        favs = favs.value,
         onFavClick = { movieId ->
             discoverLatestViewModel.switchFav(movieId)
         })
@@ -45,7 +44,7 @@ fun DiscoverMoviesGrid(
     modifier: Modifier = Modifier,
     movies: LazyPagingItems<Movie>,
     onMovieDetails: (Movie) -> Unit,
-    favs: State<List<Int>>,
+    favs: List<Int>,
     onFavClick: (Int) -> Unit
 ) {
     LazyVerticalGrid(
@@ -61,7 +60,7 @@ fun DiscoverMoviesGrid(
                         onMovieDetails(item)
                     },
                     movie = item,
-                    isFav = favs.value.contains(item.id),
+                    isFav = favs.contains(item.id),
                     onFavClick = onFavClick
                 )
             }

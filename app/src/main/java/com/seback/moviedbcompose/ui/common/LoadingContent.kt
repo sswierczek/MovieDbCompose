@@ -28,11 +28,15 @@ fun <T> LoadingContent(
     modifier: Modifier,
     response: Response<T>,
     onRetry: () -> Unit,
+    isEmptyCheck: (T) -> Boolean,
     content: @Composable (T) -> Unit
 ) {
     when (response) {
         is Response.Loading -> Loading(modifier)
-        is Response.Success -> content(response.data)
+        is Response.Success -> if (isEmptyCheck(response.data)) EmptyBody(modifier) else content(
+            response.data
+        )
+
         is Response.Error -> ErrorDisplay(modifier, message = response.message, onRetry = onRetry)
     }
 }
@@ -42,7 +46,12 @@ fun <T> LoadingContent(
 fun LoadingContentPreviewLoading() {
     MovieDbComposeTheme {
         Scaffold {
-            LoadingContent(modifier = Modifier.padding(it), Response.Loading("Loading"), {}) {}
+            LoadingContent(
+                modifier = Modifier.padding(it),
+                Response.Loading("Loading"),
+                { },
+                { false }
+            ) {}
         }
     }
 }
@@ -54,7 +63,9 @@ fun LoadingContentPreviewError() {
         Scaffold {
             LoadingContent(
                 modifier = Modifier.padding(it),
-                Response.Error<String>("Error loading content", Throwable("Error 500")), {}
+                Response.Error<String>("Error loading content", Throwable("Error 500")),
+                {},
+                { false }
             ) {}
         }
     }
