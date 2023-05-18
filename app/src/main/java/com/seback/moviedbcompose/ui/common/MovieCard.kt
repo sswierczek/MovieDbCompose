@@ -9,19 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,8 +30,7 @@ fun MovieCard(
     isFav: Boolean = false,
     onFavClick: (Int) -> Unit = {}
 ) {
-    // Introduced to provide smooth UI and instant recomposition when user click to show fav state
-    val isFavLocal = remember { mutableStateOf(isFav) }
+
     Card(
         modifier = modifier
             .padding(8.dp, 8.dp)
@@ -71,17 +62,7 @@ fun MovieCard(
                     vote = movie.voteAverage
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                IconButton(
-                    onClick = {
-                        isFavLocal.value = !isFavLocal.value
-                        onFavClick(movie.id)
-                    }
-                ) {
-                    Icon(
-                        tint = if (isFavLocal.value) Color.Red else MaterialTheme.colors.primary,
-                        imageVector = Icons.Default.Favorite, contentDescription = null
-                    )
-                }
+                FavouriteButton(movieId = movie.id, isFav = isFav, onFavClick = onFavClick)
             }
         }
     }

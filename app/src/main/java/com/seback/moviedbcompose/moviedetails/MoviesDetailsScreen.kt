@@ -2,10 +2,12 @@ package com.seback.moviedbcompose.moviedetails
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -21,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.seback.moviedbcompose.R
 import com.seback.moviedbcompose.core.data.models.MovieDetails
+import com.seback.moviedbcompose.ui.common.FavouriteButton
 import com.seback.moviedbcompose.ui.common.LoadingContent
 import com.seback.moviedbcompose.ui.common.Rating
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
@@ -30,24 +33,32 @@ import kotlinx.datetime.LocalDate
 fun MovieDetailsScreen(modifier: Modifier, onBack: () -> Unit) {
     val viewModel: MovieDetailsViewModel = hiltViewModel()
     val response = viewModel.result.collectAsState().value
-
+    val isFav = viewModel.isFav.collectAsState().value
     LoadingContent(modifier = modifier, response = response, onRetry = {
         viewModel.retry()
     }) {
         MovieDetails(
             modifier = modifier,
-            movieDetails = it
+            movieDetails = it,
+            isFav = isFav,
+            onFavClick = {
+                viewModel.onFavClicked()
+            }
         )
     }
 }
 
 @Composable
-fun MovieDetails(modifier: Modifier, movieDetails: MovieDetails) {
+fun MovieDetails(
+    modifier: Modifier,
+    movieDetails: MovieDetails,
+    isFav: Boolean,
+    onFavClick: (Int) -> Unit
+) {
     Column(modifier = modifier) {
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
-//                .size(100.dp) // PREVIEW
                 .padding(bottom = 16.dp),
             error = painterResource(id = R.drawable.ic_launcher_foreground),
             model = movieDetails.backdropPath ?: movieDetails.posterPath, contentDescription = null
@@ -72,6 +83,13 @@ fun MovieDetails(modifier: Modifier, movieDetails: MovieDetails) {
             Rating(
                 modifier = Modifier.padding(start = 16.dp),
                 vote = movieDetails.vote
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            FavouriteButton(
+                modifier = Modifier.size(32.dp),
+                movieId = movieDetails.id,
+                isFav = isFav,
+                onFavClick = onFavClick
             )
         }
         Text(
@@ -98,7 +116,9 @@ fun MovieDetailsPreview() {
                     overview = "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
                     vote = 8.5,
                     releaseDate = LocalDate.parse("2023-02-27")
-                )
+                ),
+                isFav = true,
+                onFavClick = {}
             )
         }
     }
