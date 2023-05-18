@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
@@ -30,6 +31,7 @@ fun FavouriteButton(
         }
     ) {
         Icon(
+            modifier = Modifier.alpha(0.8f),
             tint = if (isFavLocal.value) Color.Red else MaterialTheme.colors.primary,
             imageVector = Icons.Default.Favorite, contentDescription = null
         )
