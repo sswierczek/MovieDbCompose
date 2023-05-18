@@ -11,6 +11,7 @@ import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.discover.paging.DiscoverLatestPagingSource
 import com.seback.moviedbcompose.discover.usecases.GetDiscoverMoviesUseCase
+import com.seback.moviedbcompose.favs.data.FavMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -24,16 +25,20 @@ import javax.inject.Inject
 class DiscoverLatestViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getUseCase: GetDiscoverMoviesUseCase,
+    private val favUseCase: FavMovieUseCase,
     private val discoverPagerSource: DiscoverLatestPagingSource
 ) : ViewModel() {
 
-    val moviesPager: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 500)) {
+    val moviesPager: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 20)) {
         discoverPagerSource
     }.flow.cachedIn(viewModelScope)
 
     private val _result: MutableStateFlow<Response<List<Movie>>> =
         MutableStateFlow(Response.Loading(initialData = emptyList()))
     val result: StateFlow<Response<List<Movie>>> = _result
+
+    private val _favs: MutableStateFlow<List<Int>> = MutableStateFlow(emptyList())
+    val favs: StateFlow<List<Int>> = _favs
 
     fun fetch() {
         fetchData()
@@ -46,6 +51,15 @@ class DiscoverLatestViewModel @Inject constructor(
                 .collect {
                     _result.value = it
                 }
+
+            _favs.value = favUseCase.all()
+        }
+    }
+
+    fun switchFav(movieId: Int) {
+        viewModelScope.launch {
+            favUseCase.switch(movieId)
+            _favs.value = favUseCase.all()
         }
     }
 }

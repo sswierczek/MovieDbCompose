@@ -1,33 +1,20 @@
 package com.seback.moviedbcompose.latest
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.AsyncImage
-import com.seback.moviedbcompose.R
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.ui.common.LoadingContentLazy
-import com.seback.moviedbcompose.ui.common.Rating
+import com.seback.moviedbcompose.ui.common.MovieCard
 
 @Composable
 fun DiscoverLatestScreen(
@@ -38,10 +25,19 @@ fun DiscoverLatestScreen(
     val moviesLazy: LazyPagingItems<Movie> =
         discoverLatestViewModel.moviesPager.collectAsLazyPagingItems()
 
+    val favs = discoverLatestViewModel.favs.collectAsState()
+
     LoadingContentLazy(modifier = modifier, response = moviesLazy, onRetry = {
         moviesLazy.retry()
     })
-    DiscoverMoviesGrid(modifier, moviesLazy, onMovieDetails)
+    DiscoverMoviesGrid(
+        modifier = modifier,
+        movies = moviesLazy,
+        onMovieDetails = onMovieDetails,
+        favs = favs,
+        onFavClick = { movieId ->
+            discoverLatestViewModel.switchFav(movieId)
+        })
 }
 
 @Composable
@@ -49,6 +45,8 @@ fun DiscoverMoviesGrid(
     modifier: Modifier = Modifier,
     movies: LazyPagingItems<Movie>,
     onMovieDetails: (Movie) -> Unit,
+    favs: State<List<Int>>,
+    onFavClick: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -58,49 +56,20 @@ fun DiscoverMoviesGrid(
         items(movies.itemCount)
         { index ->
             movies[index]?.let { item ->
-                MovieCard(movie = item, Modifier.clickable {
-                    onMovieDetails(item)
-                })
+                MovieCard(
+                    modifier = Modifier.clickable {
+                        onMovieDetails(item)
+                    },
+                    movie = item,
+                    isFav = favs.value.contains(item.id),
+                    onFavClick = onFavClick
+                )
             }
         }
     }
 }
 
-@Composable
-fun MovieCard(
-    movie: Movie,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .padding(8.dp, 8.dp)
-            .fillMaxWidth()
-            .aspectRatio(0.56f) // 9:16
-            .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Column(
-            modifier = Modifier.sizeIn(minWidth = 96.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Surface(shape = RoundedCornerShape(8.dp)) {
-                AsyncImage(
-                    model = movie.posterPath,
-                    contentDescription = null,
-                    error = painterResource(id = R.drawable.ic_launcher_foreground),
-                    contentScale = ContentScale.FillWidth,
-                )
-            }
-            Spacer(Modifier.weight(1f))
-            Rating(
-                Modifier
-                    .padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
-                    .align(Alignment.Start),
-                vote = movie.voteAverage
-            )
-        }
-    }
-}
+
 /*
 @Preview(showBackground = true)
 @Composable

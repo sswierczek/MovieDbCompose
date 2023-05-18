@@ -20,4 +20,12 @@ interface Repository {
     interface Details {
         suspend fun fetch(id: Int): Flow<Response<MovieDetails>>
     }
+
+    interface Favourites {
+        suspend fun all(): List<Int>
+
+        suspend fun isFav(id: Int): Boolean
+
+        suspend fun switch(id: Int)
+    }
 }
