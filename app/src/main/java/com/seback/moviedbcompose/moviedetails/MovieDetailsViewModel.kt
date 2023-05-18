@@ -20,14 +20,21 @@ class MovieDetailsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getUseCase: GetMovieDetailsUseCase
 ) : ViewModel() {
-
     private val _result: MutableStateFlow<Response<MovieDetails>> =
         MutableStateFlow(Response.Loading(initialData = MovieDetails()))
-    val result: StateFlow<Response<MovieDetails>> = _result
 
+    val result: StateFlow<Response<MovieDetails>> = _result
     private val movieId = checkNotNull(savedStateHandle.get<Int>(ARGUMENT_MOVIE_ID))
 
     init {
+        fetch()
+    }
+
+    fun retry() {
+        fetch()
+    }
+
+    private fun fetch() {
         viewModelScope.launch {
             getUseCase.execute(movieId)
                 .flowOn(Dispatchers.IO)

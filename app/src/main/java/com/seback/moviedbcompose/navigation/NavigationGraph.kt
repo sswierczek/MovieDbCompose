@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.seback.moviedbcompose.discover.DiscoverLatestScreen
+import com.seback.moviedbcompose.latest.DiscoverLatestScreen
 import com.seback.moviedbcompose.discover.DiscoverNewMoviesScreen
 import com.seback.moviedbcompose.favs.FavouritesScreen
 import com.seback.moviedbcompose.moviedetails.MovieDetailsScreen

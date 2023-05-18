@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose.discover
+package com.seback.moviedbcompose.latest
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

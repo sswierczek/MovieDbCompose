@@ -1,8 +1,10 @@
-package com.seback.moviedbcompose.discover
+package com.seback.moviedbcompose.latest
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
@@ -16,11 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.seback.moviedbcompose.R
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.ui.common.LoadingContentLazy
 import com.seback.moviedbcompose.ui.common.Rating
@@ -71,6 +75,7 @@ fun MovieCard(
         modifier = modifier
             .padding(8.dp, 8.dp)
             .fillMaxWidth()
+            .aspectRatio(0.56f) // 9:16
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp)),
         shape = RoundedCornerShape(8.dp)
     ) {
@@ -82,12 +87,11 @@ fun MovieCard(
                 AsyncImage(
                     model = movie.posterPath,
                     contentDescription = null,
+                    error = painterResource(id = R.drawable.ic_launcher_foreground),
                     contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .sizeIn(minHeight = 96.dp)
-                        .fillMaxWidth()
                 )
             }
+            Spacer(Modifier.weight(1f))
             Rating(
                 Modifier
                     .padding(start = 16.dp, top = 8.dp, bottom = 8.dp)

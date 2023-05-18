@@ -13,13 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.seback.moviedbcompose.R
 import com.seback.moviedbcompose.core.data.models.MovieDetails
-import com.seback.moviedbcompose.core.data.models.Response
+import com.seback.moviedbcompose.ui.common.LoadingContent
 import com.seback.moviedbcompose.ui.common.Rating
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 import kotlinx.datetime.LocalDate
@@ -29,10 +31,12 @@ fun MovieDetailsScreen(modifier: Modifier, onBack: () -> Unit) {
     val viewModel: MovieDetailsViewModel = hiltViewModel()
     val response = viewModel.result.collectAsState().value
 
-    if (response is Response.Success) {
+    LoadingContent(modifier = modifier, response = response, onRetry = {
+        viewModel.retry()
+    }) {
         MovieDetails(
             modifier = modifier,
-            movieDetails = response.data
+            movieDetails = it
         )
     }
 }
@@ -45,7 +49,8 @@ fun MovieDetails(modifier: Modifier, movieDetails: MovieDetails) {
                 .fillMaxWidth()
 //                .size(100.dp) // PREVIEW
                 .padding(bottom = 16.dp),
-            model = movieDetails.backdropPath, contentDescription = null
+            error = painterResource(id = R.drawable.ic_launcher_foreground),
+            model = movieDetails.backdropPath ?: movieDetails.posterPath, contentDescription = null
         )
         Text(
             modifier = Modifier

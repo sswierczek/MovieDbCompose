@@ -40,7 +40,7 @@ data class ApiMovieDetails(
     @SerializedName("title")
     val title: String = "",
     @SerializedName("backdrop_path")
-    val backdropPath: String = "",
+    val backdropPath: String? = null,
     @SerializedName("revenue")
     val revenue: Int = 0,
     @SerializedName("genres")
