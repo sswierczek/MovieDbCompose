@@ -12,22 +12,22 @@ import kotlinx.coroutines.flow.Flow
  */
 interface Repository {
     interface Discover {
-        suspend fun withIds(moviesIds: List<Int>): Flow<Response<List<Movie>>>
+        fun withIds(moviesIds: List<Int>): Flow<Response<List<Movie>>>
 
-        suspend fun latest(page: Int): Flow<Response<List<Movie>>>
+        fun latest(page: Int): Flow<Response<List<Movie>>>
 
-        suspend fun discover(page: Int): Flow<Response<List<Movie>>>
+        fun discover(page: Int): Flow<Response<List<Movie>>>
     }
 
     interface Details {
-        suspend fun fetch(id: Int): Flow<Response<MovieDetails>>
+        fun fetch(id: Int): Flow<Response<MovieDetails>>
     }
 
     interface Favourites {
-        suspend fun all(): List<Int>
+        fun all(): Flow<List<Movie>>
 
         suspend fun isFav(id: Int): Boolean
 
-        suspend fun switch(id: Int)
+        suspend fun favSwitch(movie: Movie)
     }
 }

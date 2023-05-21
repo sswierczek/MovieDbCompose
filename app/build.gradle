@@ -97,6 +97,13 @@ dependencies {
     implementation "androidx.tv:tv-foundation:1.0.0-alpha06"
     implementation "androidx.tv:tv-material:1.0.0-alpha06"
 
+    // Room
+    def room_version = "2.5.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
+
     // Android
     implementation 'androidx.activity:activity-compose:1.7.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"

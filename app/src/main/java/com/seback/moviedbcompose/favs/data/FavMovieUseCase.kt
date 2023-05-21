@@ -1,6 +1,8 @@
 package com.seback.moviedbcompose.favs.data
 
 import com.seback.moviedbcompose.core.data.Repository
+import com.seback.moviedbcompose.core.data.models.Movie
+import kotlinx.coroutines.flow.Flow
 
 class FavMovieUseCase(
     private val repository: Repository.Favourites
@@ -8,9 +10,9 @@ class FavMovieUseCase(
 
     suspend fun isFav(movieId: Int) = repository.isFav(movieId)
 
-    suspend fun all(): List<Int> = repository.all()
+    fun all(): Flow<List<Movie>> = repository.all()
 
-    suspend fun switch(id: Int) {
-        repository.switch(id)
+    suspend fun favSwitch(movie: Movie) {
+        repository.favSwitch(movie)
     }
 }

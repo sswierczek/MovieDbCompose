@@ -37,29 +37,38 @@ class DiscoverLatestViewModel @Inject constructor(
         MutableStateFlow(Response.Loading(initialData = emptyList()))
     val result: StateFlow<Response<List<Movie>>> = _result
 
-    private val _favs: MutableStateFlow<List<Int>> = MutableStateFlow(emptyList())
-    val favs: StateFlow<List<Int>> = _favs
+    private val _favs: MutableStateFlow<List<Movie>> = MutableStateFlow(emptyList())
+    val favs: StateFlow<List<Movie>> = _favs
 
-    fun fetch() {
-        fetchData()
+    init {
+        observeMovies()
+        observeFavs()
     }
 
-    private fun fetchData() {
+    private fun observeMovies() {
         viewModelScope.launch {
             getUseCase.execute(1)
                 .flowOn(Dispatchers.IO)
                 .collect {
                     _result.value = it
                 }
+        }
 
-            _favs.value = favUseCase.all()
+    }
+
+    private fun observeFavs() {
+        viewModelScope.launch {
+            favUseCase.all()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _favs.value = it
+                }
         }
     }
 
-    fun switchFav(movieId: Int) {
+    fun favSwitch(movie: Movie) {
         viewModelScope.launch {
-            favUseCase.switch(movieId)
-            _favs.value = favUseCase.all()
+            favUseCase.favSwitch(movie)
         }
     }
 }

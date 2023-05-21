@@ -27,9 +27,8 @@ import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 fun MovieCard(
     modifier: Modifier = Modifier,
     movie: Movie,
-    isFav: Boolean = false,
-    onFavClick: (Int) -> Unit = {},
-    showFavIcon: Boolean = true
+    isFav: Boolean,
+    onFavClick: (Movie) -> Unit
 ) {
 
     Card(
@@ -63,9 +62,7 @@ fun MovieCard(
                     vote = movie.voteAverage
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                if (showFavIcon) {
-                    FavouriteButton(movieId = movie.id, isFav = isFav, onFavClick = onFavClick)
-                }
+                FavouriteButton(movie = movie, isFav = isFav, onFavClick = onFavClick)
             }
         }
     }
@@ -82,7 +79,9 @@ fun MovieCardPreview() {
                 backdropPath = "",
                 posterPath = "",
                 voteAverage = 8.9
-            )
+            ),
+            isFav = true,
+            onFavClick = {}
         )
     }
 }

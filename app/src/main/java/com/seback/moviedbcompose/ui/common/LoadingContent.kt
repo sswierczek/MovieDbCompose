@@ -9,6 +9,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
+import timber.log.Timber
 
 @Composable
 fun LoadingContentLazy(
@@ -31,6 +32,7 @@ fun <T> LoadingContent(
     isEmptyCheck: (T) -> Boolean,
     content: @Composable (T) -> Unit
 ) {
+    Timber.d("Loading content: $response")
     when (response) {
         is Response.Loading -> Loading(modifier)
         is Response.Success -> if (isEmptyCheck(response.data)) EmptyBody(modifier) else content(

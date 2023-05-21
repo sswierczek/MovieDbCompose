@@ -19,7 +19,7 @@ class MovieDetailsRepository(
 
     private val service = retrofit.create(RetrofitMovieDetailsService::class.java)
 
-    override suspend fun fetch(id: Int): Flow<Response<MovieDetails>> = flow {
+    override fun fetch(id: Int): Flow<Response<MovieDetails>> = flow {
         Timber.d("fetch movie details id $id [${Thread.currentThread().name}]")
         when (val response =
             service.movieDetails(apiKey = networkConfig.apiKey, movieId = id)) {

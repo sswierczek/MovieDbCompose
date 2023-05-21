@@ -52,9 +52,11 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     fun onFavClicked() {
-        viewModelScope.launch {
-            favMovieUseCase.switch(movieId)
-            _isFav.value = favMovieUseCase.isFav(movieId)
+        (result.value as? Response.Success<MovieDetails>)?.data?.let { movieDetails ->
+            viewModelScope.launch {
+                favMovieUseCase.favSwitch(movieDetails.toMovie())
+                _isFav.value = favMovieUseCase.isFav(movieId)
+            }
         }
     }
 }

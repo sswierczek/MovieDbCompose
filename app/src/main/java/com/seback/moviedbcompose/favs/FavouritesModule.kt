@@ -1,7 +1,7 @@
 package com.seback.moviedbcompose.favs
 
 import com.seback.moviedbcompose.core.data.Repository
-import com.seback.moviedbcompose.favs.data.FavListUseCase
+import com.seback.moviedbcompose.core.data.room.AppDatabase
 import com.seback.moviedbcompose.favs.data.FavMovieUseCase
 import com.seback.moviedbcompose.favs.data.FavRepository
 import dagger.Module
@@ -16,19 +16,11 @@ object FavouritesModule {
 
     @Provides
     @ViewModelScoped
-    fun provideFavRepository(): Repository.Favourites =
-        FavRepository()
+    fun provideFavRepository(appDatabase: AppDatabase): Repository.Favourites =
+        FavRepository(appDatabase.favMoviesDao())
 
     @Provides
     @ViewModelScoped
     fun provideFavMovieUseCase(repository: Repository.Favourites) =
         FavMovieUseCase(repository)
-
-    @Provides
-    @ViewModelScoped
-    fun provideFavListUseCase(
-        repositoryDiscover: Repository.Discover,
-        repositoryFavs: Repository.Favourites
-    ) =
-        FavListUseCase(repositoryDiscover, repositoryFavs)
 }

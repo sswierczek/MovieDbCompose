@@ -50,9 +50,8 @@ class TvActivity : ComponentActivity() {
 
     @Composable
     fun MainTvScreen(
+        viewModel: DiscoverLatestViewModel = hiltViewModel()
     ) {
-        val viewModel: DiscoverLatestViewModel = hiltViewModel()
-        viewModel.fetch()
         val response = viewModel.result.collectAsState().value
 
         // TODO Handle errors
@@ -64,7 +63,6 @@ class TvActivity : ComponentActivity() {
             )
         }
     }
-
 
     @Composable
     fun CatalogBrowser(

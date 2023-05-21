@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.seback.moviedbcompose.R
+import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.MovieDetails
 import com.seback.moviedbcompose.ui.common.FavouriteButton
 import com.seback.moviedbcompose.ui.common.LoadingContent
@@ -55,7 +56,7 @@ fun MovieDetails(
     modifier: Modifier,
     movieDetails: MovieDetails,
     isFav: Boolean,
-    onFavClick: (Int) -> Unit
+    onFavClick: (Movie) -> Unit
 ) {
     Column(modifier = modifier) {
         AsyncImage(
@@ -89,7 +90,7 @@ fun MovieDetails(
             Spacer(modifier = Modifier.weight(1f))
             FavouriteButton(
                 modifier = Modifier.size(32.dp),
-                movieId = movieDetails.id,
+                movie = movieDetails.toMovie(),
                 isFav = isFav,
                 onFavClick = onFavClick
             )

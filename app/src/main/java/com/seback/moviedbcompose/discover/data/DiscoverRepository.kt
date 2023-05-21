@@ -20,7 +20,7 @@ class DiscoverRepository(
 
     private val service = retrofit.create(RetrofitDiscoverService::class.java)
 
-    override suspend fun withIds(moviesIds: List<Int>): Flow<Response<List<Movie>>> = flow {
+    override fun withIds(moviesIds: List<Int>): Flow<Response<List<Movie>>> = flow {
         Timber.d("withIds [${Thread.currentThread().name}]")
 
         val movies = mutableListOf<ApiMovieDetails>()
@@ -33,7 +33,7 @@ class DiscoverRepository(
         emit(Response.Success(movies.map { it.map(emptyList()).toMovie() }))
     }
 
-    override suspend fun latest(page: Int): Flow<Response<List<Movie>>> = flow {
+    override fun latest(page: Int): Flow<Response<List<Movie>>> = flow {
         Timber.d("latest [${Thread.currentThread().name}]")
         when (val response =
             service.latest(page = page, apiKey = networkConfig.apiKey)) {
@@ -51,7 +51,7 @@ class DiscoverRepository(
         }
     }
 
-    override suspend fun discover(page: Int): Flow<Response<List<Movie>>> = flow {
+    override fun discover(page: Int): Flow<Response<List<Movie>>> = flow {
         Timber.d("discover [${Thread.currentThread().name}]")
         when (val response =
             service.discoverMovies(page = page, apiKey = networkConfig.apiKey)) {

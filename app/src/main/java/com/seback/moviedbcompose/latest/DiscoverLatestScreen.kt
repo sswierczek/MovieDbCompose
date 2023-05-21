@@ -14,6 +14,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.ui.common.LoadingContentLazy
 import com.seback.moviedbcompose.ui.common.MovieCard
+import timber.log.Timber
 
 @Composable
 fun DiscoverLatestScreen(
@@ -34,8 +35,8 @@ fun DiscoverLatestScreen(
         movies = moviesLazy,
         onMovieDetails = onMovieDetails,
         favs = favs.value,
-        onFavClick = { movieId ->
-            discoverLatestViewModel.switchFav(movieId)
+        onFavClick = { movie ->
+            discoverLatestViewModel.favSwitch(movie)
         })
 }
 
@@ -44,8 +45,8 @@ fun DiscoverMoviesGrid(
     modifier: Modifier = Modifier,
     movies: LazyPagingItems<Movie>,
     onMovieDetails: (Movie) -> Unit,
-    favs: List<Int>,
-    onFavClick: (Int) -> Unit
+    favs: List<Movie>,
+    onFavClick: (Movie) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -55,12 +56,13 @@ fun DiscoverMoviesGrid(
         items(movies.itemCount)
         { index ->
             movies[index]?.let { item ->
+                Timber.d("IsFAVVV ${favs}")
                 MovieCard(
                     modifier = Modifier.clickable {
                         onMovieDetails(item)
                     },
                     movie = item,
-                    isFav = favs.contains(item.id),
+                    isFav = favs.contains(item),
                     onFavClick = onFavClick
                 )
             }

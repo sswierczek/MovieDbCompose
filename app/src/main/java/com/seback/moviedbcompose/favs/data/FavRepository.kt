@@ -1,33 +1,37 @@
 package com.seback.moviedbcompose.favs.data
 
 import com.seback.moviedbcompose.core.data.Repository
+import com.seback.moviedbcompose.core.data.models.Movie
+import com.seback.moviedbcompose.favs.data.room.FavMovie
+import com.seback.moviedbcompose.favs.data.room.FavMoviesDao
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-class FavRepository : Repository.Favourites {
+class FavRepository(private val favMoviesDao: FavMoviesDao) : Repository.Favourites {
 
-    // TODO Save to DB
-    object Temp {
-        val temporaryFavs = mutableListOf<Int>()
-    }
+    override fun all(): Flow<List<Movie>> =
+        favMoviesDao.getAll().map { movies -> movies.map { it.toMovie() } }
 
-    override suspend fun all(): List<Int> {
-        return withContext(Dispatchers.IO) {
-            Temp.temporaryFavs
-        }
-    }
+    override suspend fun isFav(id: Int): Boolean =
+        favMoviesDao.findById(id) != null
 
-    override suspend fun isFav(id: Int): Boolean = Temp.temporaryFavs.contains(id)
-
-    override suspend fun switch(id: Int) {
+    override suspend fun favSwitch(movie: Movie) {
         withContext(Dispatchers.IO) {
-            tempMakeFav(id)
+            if (favMoviesDao.findById(movie.id) == null) {
+                favMoviesDao.insertAll(movie.toFavMovie())
+            } else {
+                favMoviesDao.delete(movie.toFavMovie())
+            }
         }
-    }
-
-    private fun tempMakeFav(movieId: Int) {
-        if (Temp.temporaryFavs.contains(movieId)) Temp.temporaryFavs.remove(movieId) else Temp.temporaryFavs.add(
-            movieId
-        )
     }
 }
+
+private fun Movie.toFavMovie(): FavMovie = FavMovie(
+    id = id,
+    title = title,
+    posterPath = posterPath,
+    backdropPath = backdropPath,
+    voteAverage = voteAverage
+)
