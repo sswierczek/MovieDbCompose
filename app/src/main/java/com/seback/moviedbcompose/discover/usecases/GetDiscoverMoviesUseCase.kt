@@ -9,7 +9,7 @@ class GetDiscoverMoviesUseCase(
     private val repository: Repository.Discover
 ) {
 
-    suspend fun execute(page: Int): Flow<Response<List<Movie>>> {
+    fun execute(page: Int): Flow<Response<List<Movie>>> {
         return repository.latest(page)
     }
 }

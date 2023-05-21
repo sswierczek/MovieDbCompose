@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 class GetMovieDetailsUseCase(private val repository: Repository.Details) {
 
-    suspend fun execute(movieId: Int): Flow<Response<MovieDetails>> {
+    fun execute(movieId: Int): Flow<Response<MovieDetails>> {
         return repository.fetch(movieId)
     }
 }

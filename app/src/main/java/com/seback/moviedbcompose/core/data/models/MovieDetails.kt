@@ -32,5 +32,5 @@ fun ApiMovieDetails.map(videos: List<ApiMovieVideo>): MovieDetails =
         "https://image.tmdb.org/t/p/w500$posterPath",
         voteAverage,
         LocalDate.parse(releaseDate),
-        videos.filter { it.isFromYouTube() && it.isTrailer() }.map { it.videoKey }
+        videos.filter { it.isFromYouTube() && it.isTrailer() && it.official }.map { it.videoKey }
     )

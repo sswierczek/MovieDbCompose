@@ -11,7 +11,9 @@ data class ApiMovieVideo(
     @SerializedName("site")
     val site: String,
     @SerializedName("type")
-    val type: String
+    val type: String,
+    @SerializedName("official")
+    val official: Boolean
 ) {
     fun isTrailer() = type == "Trailer"
     fun isFromYouTube() = site == "YouTube"

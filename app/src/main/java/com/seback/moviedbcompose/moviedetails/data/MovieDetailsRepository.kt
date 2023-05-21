@@ -2,6 +2,8 @@ package com.seback.moviedbcompose.moviedetails.data
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.seback.moviedbcompose.core.data.Repository
+import com.seback.moviedbcompose.core.data.api.ApiMovieDetails
+import com.seback.moviedbcompose.core.data.api.ApiMovieVideo
 import com.seback.moviedbcompose.core.data.models.MovieDetails
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.core.data.models.map
@@ -24,8 +26,9 @@ class MovieDetailsRepository(
         when (val response =
             service.movieDetails(apiKey = networkConfig.apiKey, movieId = id)) {
             is NetworkResponse.Success -> {
-                // TODO Implement trailers list
-                emit(Response.Success(response.body.map(emptyList())))
+                val movie = response.body
+                val videos = videosForMovie(movie)
+                emit(Response.Success(movie.map(videos)))
             }
 
             is NetworkResponse.Error -> {
@@ -36,5 +39,15 @@ class MovieDetailsRepository(
                 emit(unknownError())
             }
         }
+    }
+
+    private suspend fun videosForMovie(movie: ApiMovieDetails): List<ApiMovieVideo> {
+        val videosResponse = service.movieVideos(apiKey = networkConfig.apiKey, movieId = movie.id)
+        return if (videosResponse is NetworkResponse.Success) {
+            videosResponse.body.results
+        } else {
+            emptyList()
+        }
+
     }
 }
