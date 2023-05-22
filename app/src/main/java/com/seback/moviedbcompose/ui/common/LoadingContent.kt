@@ -43,6 +43,19 @@ fun <T> LoadingContent(
     }
 }
 
+@Composable
+fun <T> LoadingContentWithoutResponse(
+    modifier: Modifier,
+    data: T,
+    isEmptyCheck: (T) -> Boolean,
+    content: @Composable (T) -> Unit
+) {
+    Timber.d("Loading content data: $data")
+    if (isEmptyCheck(data)) EmptyBody(modifier) else content(
+        data
+    )
+}
+
 @Preview
 @Composable
 fun LoadingContentPreviewLoading() {

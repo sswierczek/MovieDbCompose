@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.seback.moviedbcompose.core.data.models.Movie
+import com.seback.moviedbcompose.ui.common.LoadingContentWithoutResponse
 import com.seback.moviedbcompose.ui.common.MovieCard
 
 @Composable
@@ -21,12 +22,18 @@ fun FavouritesScreen(
 ) {
     val favouriteMovies = viewModel.result.collectAsState()
 
-    FavouritesMoviesGrid(
+    LoadingContentWithoutResponse(
         modifier = modifier,
-        movies = favouriteMovies.value,
-        onMovieDetails = onMovieDetails,
-        onFavClick = { viewModel.removeFav(it) }
-    )
+        favouriteMovies.value,
+        isEmptyCheck = { it.isEmpty() }
+    ) {
+        FavouritesMoviesGrid(
+            modifier = modifier,
+            movies = it,
+            onMovieDetails = onMovieDetails,
+            onFavClick = { movie -> viewModel.removeFav(movie) }
+        )
+    }
 }
 
 @Composable
