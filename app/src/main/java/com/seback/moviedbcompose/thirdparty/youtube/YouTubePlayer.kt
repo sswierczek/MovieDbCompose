@@ -13,7 +13,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 @Composable
 fun YouTubePlayer(modifier: Modifier, videoId: String) {
-    val videoIdState by rememberSaveable { mutableStateOf(videoId) }
     var playbackTime by rememberSaveable { mutableStateOf(0f) }
 
     AndroidView(
@@ -23,9 +22,9 @@ fun YouTubePlayer(modifier: Modifier, videoId: String) {
                 addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
                         if (playbackTime > 0) {
-                            youTubePlayer.loadVideo(videoIdState, playbackTime)
+                            youTubePlayer.loadVideo(videoId, playbackTime)
                         } else {
-                            youTubePlayer.cueVideo(videoIdState, playbackTime)
+                            youTubePlayer.cueVideo(videoId, playbackTime)
                         }
                     }
 
