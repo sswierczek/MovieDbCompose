@@ -92,7 +92,7 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.5.3"
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.30.1"
     implementation "com.google.android.material:material:1.9.0"
-    implementation "androidx.paging:paging-compose:1.0.0-alpha19"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha19" // on alpha-20 fix preview
 
     // Compose TV
     implementation "androidx.tv:tv-foundation:1.0.0-alpha06"

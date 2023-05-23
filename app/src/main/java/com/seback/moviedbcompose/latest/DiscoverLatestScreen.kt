@@ -8,14 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.ui.common.LoadingContentLazy
 import com.seback.moviedbcompose.ui.common.MovieCard
-import timber.log.Timber
+import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun DiscoverLatestScreen(
@@ -56,7 +59,6 @@ fun DiscoverMoviesGrid(
         items(movies.itemCount)
         { index ->
             movies[index]?.let { item ->
-                Timber.d("IsFAVVV ${favs}")
                 MovieCard(
                     modifier = Modifier.clickable {
                         onMovieDetails(item)
@@ -70,59 +72,30 @@ fun DiscoverMoviesGrid(
     }
 }
 
-
-/*
 @Preview(showBackground = true)
 @Composable
 fun MainGridPreview() {
+    // Not working in preview for now, until paging-compose 1.0.0-alpha20.
+    // See https://issuetracker.google.com/issues/194544557
+    val items = flowOf(
+        PagingData.from(
+            List(30) {
+                Movie(
+                    id = it,
+                    title = "Movie Some $it",
+                    posterPath = "",
+                    voteAverage = 10.0 / it
+                )
+            })
+    ).collectAsLazyPagingItems()
+
     MovieDbComposeTheme {
         DiscoverMoviesGrid(
-            movies = listOf(
-                Movie(
-                    id = 0,
-                    title = "Movie Some 1",
-                    posterPath = "",
-                    voteAverage = 5.5
-                ),
-                Movie(
-                    id = 1,
-                    title = "Some movie 2",
-                    posterPath = "",
-                    voteAverage = 5.5
-                ),
-                Movie(
-                    id = 2,
-                    title = "Some movie 3",
-                    posterPath = "",
-                    voteAverage = 5.5
-                ),
-                Movie(
-                    id = 3,
-                    title = "Some movie 4",
-                    posterPath = "",
-                    voteAverage = 5.5
-                ),
-                Movie(
-                    id = 4,
-                    title = "Some movie 5",
-                    posterPath = "",
-                    voteAverage = 5.5
-                ),
-                Movie(
-                    id = 5,
-                    title = "Some movie 6",
-                    posterPath = "",
-                    voteAverage = 5.5
-                ),
-                Movie(
-                    id = 6,
-                    title = "Some movie 7 long text even longer than this",
-                    posterPath = "",
-                    voteAverage = 5.5
-                )
-            ),
-            onMovieDetails = {}
+            movies = items,
+            onMovieDetails = {},
+            onFavClick = {},
+            favs = emptyList()
         )
     }
 }
-*/
+
