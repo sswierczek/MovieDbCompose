@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,10 +15,13 @@ import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 import kotlinx.datetime.LocalDate
 
 @Composable
-fun MovieDetailsScreen(modifier: Modifier, onBack: () -> Unit) {
-    val viewModel: MovieDetailsViewModel = hiltViewModel()
-    val response = viewModel.result.collectAsState().value
-    val isFav = viewModel.isFav.collectAsState().value
+fun MovieDetailsScreen(
+    modifier: Modifier,
+    onBack: () -> Unit,
+    viewModel: MovieDetailsViewModel = hiltViewModel()
+) {
+    val response by viewModel.result.collectAsState()
+    val isFav by viewModel.isFav.collectAsState()
     LoadingContent(modifier = modifier,
         response = response,
         isEmptyCheck = { false },

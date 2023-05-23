@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,11 +21,11 @@ fun FavouritesScreen(
     onMovieDetails: (Movie) -> Unit,
     viewModel: FavouritesViewModel = hiltViewModel()
 ) {
-    val favouriteMovies = viewModel.result.collectAsState()
+    val favouriteMovies by viewModel.result.collectAsState()
 
     LoadingContentWithoutResponse(
         modifier = modifier,
-        favouriteMovies.value,
+        favouriteMovies,
         isEmptyCheck = { it.isEmpty() }
     ) {
         FavouritesMoviesGrid(

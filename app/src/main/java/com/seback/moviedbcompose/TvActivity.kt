@@ -3,14 +3,19 @@ package com.seback.moviedbcompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Devices.TV_720p
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +46,6 @@ class TvActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             MaterialTheme {
                 MainTvScreen()
             }
@@ -52,9 +56,15 @@ class TvActivity : ComponentActivity() {
     fun MainTvScreen(
         viewModel: DiscoverLatestViewModel = hiltViewModel()
     ) {
-        val response = viewModel.result.collectAsState().value
+        val response by viewModel.result.collectAsState()
+        LoadData(response = response)
+    }
 
-        // TODO Handle errors
+    // TODO Handle errors
+    @Composable
+    fun LoadData(
+        response: Response<List<Movie>>
+    ) {
         if (response is Response.Success) {
             CatalogBrowser(
                 sectionList = listOf(
@@ -119,7 +129,13 @@ class TvActivity : ComponentActivity() {
                     contentDescription = movie.title,
                 )
                 Rating(
-                    Modifier.align(Alignment.TopStart),
+                    Modifier
+                        .align(Alignment.TopStart)
+                        .padding(4.dp)
+                        .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
+                        .background(
+                            MaterialTheme.colorScheme.secondary
+                        ),
                     movie.voteAverage,
                 )
             }

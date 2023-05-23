@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,10 +23,9 @@ fun DiscoverLatestScreen(
     onMovieDetails: (Movie) -> Unit,
     discoverLatestViewModel: DiscoverLatestViewModel = hiltViewModel()
 ) {
-    val moviesLazy: LazyPagingItems<Movie> =
-        discoverLatestViewModel.moviesPager.collectAsLazyPagingItems()
+    val moviesLazy = discoverLatestViewModel.moviesPager.collectAsLazyPagingItems()
 
-    val favs = discoverLatestViewModel.favs.collectAsState()
+    val favs by discoverLatestViewModel.favs.collectAsState()
 
     LoadingContentLazy(modifier = modifier, response = moviesLazy, onRetry = {
         moviesLazy.retry()
@@ -34,7 +34,7 @@ fun DiscoverLatestScreen(
         modifier = modifier,
         movies = moviesLazy,
         onMovieDetails = onMovieDetails,
-        favs = favs.value,
+        favs = favs,
         onFavClick = { movie ->
             discoverLatestViewModel.favSwitch(movie)
         })
