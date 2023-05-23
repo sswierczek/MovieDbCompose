@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose.latest
+package com.seback.moviedbcompose.home
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -7,11 +7,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
-import com.seback.moviedbcompose.discover.paging.DiscoverLatestPagingSource
-import com.seback.moviedbcompose.discover.usecases.GetDiscoverMoviesUseCase
 import com.seback.moviedbcompose.favs.data.FavMovieUseCase
+import com.seback.moviedbcompose.home.paging.HomePagingSource
+import com.seback.moviedbcompose.home.usecases.GetHomeLatest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,38 +23,51 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DiscoverLatestViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getUseCase: GetDiscoverMoviesUseCase,
+    private val getLatest: GetHomeLatest,
     private val favUseCase: FavMovieUseCase,
-    private val discoverPagerSource: DiscoverLatestPagingSource
+    private val repository: Repository.Home
 ) : ViewModel() {
 
-    val moviesPager: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 20)) {
-        discoverPagerSource
+    val latest: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 20)) {
+        HomePagingSource(Repository.Home.HomeDataType.LATEST, repository)
     }.flow.cachedIn(viewModelScope)
 
-    private val _result: MutableStateFlow<Response<List<Movie>>> =
+    val popular: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 20)) {
+        HomePagingSource(Repository.Home.HomeDataType.POPULAR, repository)
+    }.flow.cachedIn(viewModelScope)
+
+    val top: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 20)) {
+        HomePagingSource(Repository.Home.HomeDataType.TOP, repository)
+    }.flow.cachedIn(viewModelScope)
+
+    private val _latestMovies: MutableStateFlow<Response<List<Movie>>> =
         MutableStateFlow(Response.Loading(initialData = emptyList()))
-    val result: StateFlow<Response<List<Movie>>> = _result
+    val latestMovies: StateFlow<Response<List<Movie>>> = _latestMovies
 
     private val _favs: MutableStateFlow<List<Movie>> = MutableStateFlow(emptyList())
     val favs: StateFlow<List<Movie>> = _favs
 
     init {
-        observeMovies()
+        observeLatest()
         observeFavs()
     }
 
-    private fun observeMovies() {
+    fun favSwitch(movie: Movie) {
         viewModelScope.launch {
-            getUseCase.execute(1)
+            favUseCase.favSwitch(movie)
+        }
+    }
+
+    private fun observeLatest() {
+        viewModelScope.launch {
+            getLatest.execute(1)
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    _result.value = it
+                    _latestMovies.value = it
                 }
         }
-
     }
 
     private fun observeFavs() {
@@ -63,12 +77,6 @@ class DiscoverLatestViewModel @Inject constructor(
                 .collect {
                     _favs.value = it
                 }
-        }
-    }
-
-    fun favSwitch(movie: Movie) {
-        viewModelScope.launch {
-            favUseCase.favSwitch(movie)
         }
     }
 }

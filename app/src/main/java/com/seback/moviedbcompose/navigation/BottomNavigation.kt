@@ -13,7 +13,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 val bottomNavigationItems = listOf(
-    BottomNavigationItem.Latest,
+    BottomNavigationItem.Home,
     BottomNavigationItem.Discover,
     BottomNavigationItem.Favourites
 )

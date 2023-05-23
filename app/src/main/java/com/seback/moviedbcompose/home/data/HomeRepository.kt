@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose.discover.data
+package com.seback.moviedbcompose.home.data
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.seback.moviedbcompose.core.data.Repository
@@ -12,17 +12,21 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.Retrofit
 import timber.log.Timber
 
-class DiscoverRepository(
+class HomeRepository(
     retrofit: Retrofit,
     private val networkConfig: NetworkConfig
-) : Repository.Discover {
+) : Repository.Home {
 
-    private val service = retrofit.create(RetrofitDiscoverService::class.java)
+    private val service = retrofit.create(HomeRetrofitService::class.java)
 
-    override fun discover(page: Int): Flow<Response<List<Movie>>> = flow {
-        Timber.d("discover [${Thread.currentThread().name}]")
-        when (val response =
-            service.discoverMovies(page = page, apiKey = networkConfig.apiKey)) {
+    override fun fetch(type: Repository.Home.HomeDataType, page: Int): Flow<Response<List<Movie>>> = flow {
+        Timber.d("fetch $type [${Thread.currentThread().name}]")
+        val response = when (type) {
+            Repository.Home.HomeDataType.LATEST -> service.latest(page = page, apiKey = networkConfig.apiKey)
+            Repository.Home.HomeDataType.POPULAR -> service.popular(page = page, apiKey = networkConfig.apiKey)
+            Repository.Home.HomeDataType.TOP -> service.top(page = page, apiKey = networkConfig.apiKey)
+        }
+        when (response) {
             is NetworkResponse.Success -> {
                 emit(Response.Success(response.body.results.map { it.map() }))
             }

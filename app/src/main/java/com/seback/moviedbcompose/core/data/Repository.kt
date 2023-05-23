@@ -11,11 +11,18 @@ import kotlinx.coroutines.flow.Flow
  * Categorized by API categories https://developers.themoviedb.org/3/
  */
 interface Repository {
+
+    interface Home {
+        enum class HomeDataType {
+            LATEST,
+            POPULAR,
+            TOP
+        }
+
+        fun fetch(type: HomeDataType, page: Int): Flow<Response<List<Movie>>>
+    }
+
     interface Discover {
-        fun withIds(moviesIds: List<Int>): Flow<Response<List<Movie>>>
-
-        fun latest(page: Int): Flow<Response<List<Movie>>>
-
         fun discover(page: Int): Flow<Response<List<Movie>>>
     }
 

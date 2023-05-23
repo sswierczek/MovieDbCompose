@@ -1,15 +1,15 @@
-package com.seback.moviedbcompose.discover.usecases
+package com.seback.moviedbcompose.home.usecases
 
 import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
 import kotlinx.coroutines.flow.Flow
 
-class GetDiscoverMoviesUseCase(
-    private val repository: Repository.Discover
+class GetHomeLatest(
+    private val repository: Repository.Home
 ) {
 
     fun execute(page: Int): Flow<Response<List<Movie>>> {
-        return repository.latest(page)
+        return repository.fetch(Repository.Home.HomeDataType.LATEST, page)
     }
 }

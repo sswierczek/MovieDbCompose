@@ -30,7 +30,7 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
-import com.seback.moviedbcompose.latest.DiscoverLatestViewModel
+import com.seback.moviedbcompose.home.HomeViewModel
 import com.seback.moviedbcompose.ui.common.Rating
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,9 +54,9 @@ class TvActivity : ComponentActivity() {
 
     @Composable
     fun MainTvScreen(
-        viewModel: DiscoverLatestViewModel = hiltViewModel()
+        viewModel: HomeViewModel = hiltViewModel()
     ) {
-        val response by viewModel.result.collectAsState()
+        val response by viewModel.latestMovies.collectAsState()
         LoadData(response = response)
     }
 

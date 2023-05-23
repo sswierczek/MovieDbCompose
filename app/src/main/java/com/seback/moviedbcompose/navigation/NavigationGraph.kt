@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.seback.moviedbcompose.discover.DiscoverNewMoviesScreen
 import com.seback.moviedbcompose.favs.FavouritesScreen
-import com.seback.moviedbcompose.latest.DiscoverLatestScreen
+import com.seback.moviedbcompose.home.HomeScreen
 import com.seback.moviedbcompose.moviedetails.MovieDetailsScreen
 
 const val ARGUMENT_MOVIE_ID = "movieId"
@@ -23,10 +23,10 @@ fun NavigationGraph(
 
     NavHost(
         navController = navController,
-        startDestination = BottomNavigationItem.Latest.route
+        startDestination = BottomNavigationItem.Home.route
     ) {
-        composable(BottomNavigationItem.Latest.route) {
-            DiscoverLatestScreen(modifier, onMovieDetails = {
+        composable(BottomNavigationItem.Home.route) {
+            HomeScreen(modifier, onMovieDetails = {
                 navController.navigate("$ARGUMENT_MOVIE_DETAILS/${it.id}")
             })
         }
