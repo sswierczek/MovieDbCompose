@@ -38,6 +38,7 @@ fun HomeScreen(
     val moviesLazy = when (dataType) {
         Repository.Home.HomeDataType.LATEST -> homeViewModel.latest
         Repository.Home.HomeDataType.POPULAR -> homeViewModel.popular
+        Repository.Home.HomeDataType.UPCOMING -> homeViewModel.upcoming
         Repository.Home.HomeDataType.TOP -> homeViewModel.top
     }.collectAsLazyPagingItems()
 

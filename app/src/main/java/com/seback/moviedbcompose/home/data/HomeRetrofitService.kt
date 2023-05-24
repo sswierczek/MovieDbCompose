@@ -14,6 +14,12 @@ interface HomeRetrofitService {
         @Query("page") page: Int
     ): NetworkResponse<ApiMovieResult, ApiErrorResponse>
 
+    @GET("movie/upcoming")
+    suspend fun upcoming(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): NetworkResponse<ApiMovieResult, ApiErrorResponse>
+
     @GET("movie/popular")
     suspend fun popular(
         @Query("api_key") apiKey: String,

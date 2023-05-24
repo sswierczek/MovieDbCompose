@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.seback.moviedbcompose.discover.DiscoverNewMoviesScreen
+import com.seback.moviedbcompose.discover.DiscoverMoviesScreen
 import com.seback.moviedbcompose.favs.FavouritesScreen
 import com.seback.moviedbcompose.home.HomeScreen
 import com.seback.moviedbcompose.moviedetails.MovieDetailsScreen
@@ -31,7 +31,7 @@ fun NavigationGraph(
             })
         }
         composable(BottomNavigationItem.Discover.route) {
-            DiscoverNewMoviesScreen(modifier)
+            DiscoverMoviesScreen(modifier)
         }
         composable(BottomNavigationItem.Favourites.route) {
             FavouritesScreen(modifier, onMovieDetails = {

@@ -15,6 +15,7 @@ interface Repository {
     interface Home {
         enum class HomeDataType {
             LATEST,
+            UPCOMING,
             POPULAR,
             TOP
         }

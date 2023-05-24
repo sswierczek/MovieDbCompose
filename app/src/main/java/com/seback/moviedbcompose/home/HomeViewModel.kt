@@ -22,6 +22,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+private const val PAGE_SIZE = 5
+
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -30,15 +33,19 @@ class HomeViewModel @Inject constructor(
     private val repository: Repository.Home
 ) : ViewModel() {
 
-    val latest: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 20)) {
+    val latest: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
         HomePagingSource(Repository.Home.HomeDataType.LATEST, repository)
     }.flow.cachedIn(viewModelScope)
 
-    val popular: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 20)) {
+    val upcoming: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
+        HomePagingSource(Repository.Home.HomeDataType.UPCOMING, repository)
+    }.flow.cachedIn(viewModelScope)
+
+    val popular: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
         HomePagingSource(Repository.Home.HomeDataType.POPULAR, repository)
     }.flow.cachedIn(viewModelScope)
 
-    val top: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 20)) {
+    val top: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = PAGE_SIZE)) {
         HomePagingSource(Repository.Home.HomeDataType.TOP, repository)
     }.flow.cachedIn(viewModelScope)
 

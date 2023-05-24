@@ -3,7 +3,7 @@ package com.seback.moviedbcompose.home
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Recommend
-import androidx.compose.material.icons.filled.RocketLaunch
+import androidx.compose.material.icons.filled.Rocket
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,12 +20,12 @@ fun HomeTabs(onTab: (Repository.Home.HomeDataType) -> Unit) {
         Tab(
             Repository.Home.HomeDataType.LATEST,
             stringResource(id = R.string.latest),
-            Icons.Default.RocketLaunch
+            Icons.Default.LocalFireDepartment
         ),
         Tab(
-            Repository.Home.HomeDataType.POPULAR,
-            stringResource(id = R.string.popular),
-            Icons.Default.LocalFireDepartment
+            Repository.Home.HomeDataType.UPCOMING,
+            stringResource(id = R.string.upcoming),
+            Icons.Default.Rocket
         ),
         Tab(
             Repository.Home.HomeDataType.TOP,

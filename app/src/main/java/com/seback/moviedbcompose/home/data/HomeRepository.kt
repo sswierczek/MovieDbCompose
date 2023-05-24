@@ -25,6 +25,7 @@ class HomeRepository(
             Repository.Home.HomeDataType.LATEST -> service.latest(page = page, apiKey = networkConfig.apiKey)
             Repository.Home.HomeDataType.POPULAR -> service.popular(page = page, apiKey = networkConfig.apiKey)
             Repository.Home.HomeDataType.TOP -> service.top(page = page, apiKey = networkConfig.apiKey)
+            Repository.Home.HomeDataType.UPCOMING -> service.upcoming(page = page, apiKey = networkConfig.apiKey)
         }
         when (response) {
             is NetworkResponse.Success -> {
