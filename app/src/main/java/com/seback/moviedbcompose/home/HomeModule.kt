@@ -3,7 +3,6 @@ package com.seback.moviedbcompose.home
 import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.network.NetworkConfig
 import com.seback.moviedbcompose.home.data.HomeRepository
-import com.seback.moviedbcompose.home.usecases.GetHomeLatest
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,9 +24,4 @@ class HomeModule {
             retrofit = retrofit,
             networkConfig = networkConfig
         )
-
-    @Provides
-    @ViewModelScoped
-    fun provideGetHomeLatest(repository: Repository.Home) =
-        GetHomeLatest(repository)
 }

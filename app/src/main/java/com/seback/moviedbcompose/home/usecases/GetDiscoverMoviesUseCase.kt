@@ -4,8 +4,9 @@ import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GetHomeLatest(
+class GetHomeLatest @Inject constructor(
     private val repository: Repository.Home
 ) {
 

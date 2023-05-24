@@ -23,10 +23,10 @@ class FavouritesViewModel @Inject constructor(
     val result: StateFlow<List<Movie>> = _result
 
     init {
-        fetchData()
+        observeFavourites()
     }
 
-    private fun fetchData() {
+    private fun observeFavourites() {
         viewModelScope.launch {
             favMovieUseCase.all().flowOn(Dispatchers.IO).collect {
                 _result.value = it

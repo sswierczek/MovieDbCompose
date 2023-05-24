@@ -3,7 +3,6 @@ package com.seback.moviedbcompose.moviedetails
 import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.network.NetworkConfig
 import com.seback.moviedbcompose.moviedetails.data.MovieDetailsRepository
-import com.seback.moviedbcompose.moviedetails.usecases.GetMovieDetailsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,9 +21,4 @@ object MovieDetailsModule {
         networkConfig: NetworkConfig
     ): Repository.Details =
         MovieDetailsRepository(retrofit = retrofit, networkConfig = networkConfig)
-
-    @Provides
-    @ViewModelScoped
-    fun provideGetDiscoverMoviesUseCase(repository: Repository.Details) =
-        GetMovieDetailsUseCase(repository = repository)
 }

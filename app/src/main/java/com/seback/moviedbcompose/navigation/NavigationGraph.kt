@@ -31,7 +31,9 @@ fun NavigationGraph(
             })
         }
         composable(BottomNavigationItem.Discover.route) {
-            DiscoverMoviesScreen(modifier)
+            DiscoverMoviesScreen(modifier, onMovieDetails = {
+                navController.navigate("$ARGUMENT_MOVIE_DETAILS/${it.id}")
+            })
         }
         composable(BottomNavigationItem.Favourites.route) {
             FavouritesScreen(modifier, onMovieDetails = {

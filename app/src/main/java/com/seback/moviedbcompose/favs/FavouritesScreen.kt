@@ -32,7 +32,7 @@ fun FavouritesScreen(
             modifier = modifier,
             movies = it,
             onMovieDetails = onMovieDetails,
-            onFavClick = { movie -> viewModel.removeFav(movie) }
+            onFavClick = viewModel::removeFav
         )
     }
 }

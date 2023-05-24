@@ -29,53 +29,36 @@ import kotlinx.coroutines.flow.flowOf
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onMovieDetails: (Movie) -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     var dataType by rememberSaveable {
         mutableStateOf(Repository.Home.HomeDataType.LATEST)
     }
 
-    val moviesLazy = when (dataType) {
-        Repository.Home.HomeDataType.LATEST -> homeViewModel.latest
-        Repository.Home.HomeDataType.POPULAR -> homeViewModel.popular
-        Repository.Home.HomeDataType.UPCOMING -> homeViewModel.upcoming
-        Repository.Home.HomeDataType.TOP -> homeViewModel.top
-    }.collectAsLazyPagingItems()
+    val favs by viewModel.favs.collectAsState()
 
-    val favs by homeViewModel.favs.collectAsState()
+    val movies = when (dataType) {
+        Repository.Home.HomeDataType.LATEST -> viewModel.latest
+        Repository.Home.HomeDataType.POPULAR -> viewModel.popular
+        Repository.Home.HomeDataType.UPCOMING -> viewModel.upcoming
+        Repository.Home.HomeDataType.TOP -> viewModel.top
+    }.collectAsLazyPagingItems()
 
     Column(modifier = modifier) {
         HomeTabs(onTab = {
             dataType = it
         })
-        HomeContent(modifier = Modifier,
-            movies = moviesLazy,
+        LoadingContentLazy(modifier = Modifier, response = movies, onRetry = {
+            movies.retry()
+        })
+        HomeGrid(
+            modifier = Modifier,
+            movies = movies,
             onMovieDetails = onMovieDetails,
             favs = favs,
-            onFavClick = {
-                homeViewModel.favSwitch(it)
-            })
+            onFavClick = viewModel::favSwitch
+        )
     }
-}
-
-@Composable
-fun HomeContent(
-    modifier: Modifier = Modifier,
-    movies: LazyPagingItems<Movie>,
-    onMovieDetails: (Movie) -> Unit,
-    favs: List<Movie>,
-    onFavClick: (Movie) -> Unit
-) {
-    LoadingContentLazy(modifier = modifier, response = movies, onRetry = {
-        movies.retry()
-    })
-    HomeGrid(
-        modifier = modifier,
-        movies = movies,
-        onMovieDetails = onMovieDetails,
-        favs = favs,
-        onFavClick = onFavClick
-    )
 }
 
 @Composable

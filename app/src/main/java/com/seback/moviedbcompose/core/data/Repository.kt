@@ -24,6 +24,7 @@ interface Repository {
     }
 
     interface Discover {
+        fun search(query: String, page: Int): Flow<Response<List<Movie>>>
         fun discover(page: Int): Flow<Response<List<Movie>>>
     }
 
