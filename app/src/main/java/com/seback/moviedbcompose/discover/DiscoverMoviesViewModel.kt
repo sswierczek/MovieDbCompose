@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
+import com.seback.moviedbcompose.discover.usecases.GenresListUseCase
 import com.seback.moviedbcompose.discover.usecases.SearchUseCase
 import com.seback.moviedbcompose.favs.data.FavMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ class DiscoverMoviesViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val searchUseCase: SearchUseCase,
     private val favUseCase: FavMovieUseCase,
+    private val genresListUseCase: GenresListUseCase
 ) : ViewModel() {
 
     private val _favs: MutableStateFlow<List<Movie>> = MutableStateFlow(emptyList())
@@ -34,12 +36,27 @@ class DiscoverMoviesViewModel @Inject constructor(
         MutableStateFlow(Response.Success(emptyList()))
     val result: StateFlow<Response<List<Movie>>> = _result
 
+    private val _genres: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+    val genres: StateFlow<List<String>> = _genres
+
     private var searchJob: Job? = null
 
     init {
         observeSearch()
         observeFavs()
+        fetchGenres()
     }
+
+    private fun fetchGenres() {
+        viewModelScope.launch {
+            genresListUseCase.execute()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _genres.value = it
+                }
+        }
+    }
+
 
     private fun searchWith(query: String) {
         searchJob?.cancel()

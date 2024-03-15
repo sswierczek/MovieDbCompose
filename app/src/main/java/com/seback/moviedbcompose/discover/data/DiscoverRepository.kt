@@ -52,4 +52,22 @@ class DiscoverRepository(
             }
         }
     }
+
+    override fun genres(): Flow<Response<List<String>>> = flow {
+        Timber.d("genres [${Thread.currentThread().name}]")
+        when (val response =
+            service.genres(apiKey = networkConfig.apiKey)) {
+            is NetworkResponse.Success -> {
+                emit(Response.Success((response.body.genres ?: emptyList()).map { it.name }))
+            }
+
+            is NetworkResponse.Error -> {
+                emit(Response.Error(response.error.message, response.error))
+            }
+
+            else -> {
+                emit(unknownError())
+            }
+        }
+    }
 }

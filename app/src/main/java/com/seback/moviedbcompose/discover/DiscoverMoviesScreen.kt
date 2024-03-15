@@ -27,7 +27,7 @@ fun DiscoverMoviesScreen(
 ) {
 
     val movies by viewModel.result.collectAsState()
-
+    val genres by viewModel.genres.collectAsState()
     val favs by viewModel.favs.collectAsState()
 
     Column(modifier = modifier) {
@@ -37,6 +37,10 @@ fun DiscoverMoviesScreen(
             onChange = {
                 viewModel.searchTextChanged(it)
             }
+        )
+        DiscoverFilterScreen(
+            modifier = Modifier,
+            genres = genres
         )
         LoadingContent(modifier = Modifier,
             response = movies,
