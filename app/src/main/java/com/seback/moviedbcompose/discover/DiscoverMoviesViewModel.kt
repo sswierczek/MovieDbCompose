@@ -8,6 +8,7 @@ import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.discover.usecases.GenresListUseCase
 import com.seback.moviedbcompose.discover.usecases.SearchUseCase
 import com.seback.moviedbcompose.favs.data.FavMovieUseCase
+import com.seback.moviedbcompose.ui.common.SortOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -101,6 +102,10 @@ class DiscoverMoviesViewModel @Inject constructor(
     }
 
     fun retry() {
+        TODO("Not yet implemented")
+    }
+
+    fun sortOrderChanged(newOrder: SortOption) {
         TODO("Not yet implemented")
     }
 }
