@@ -24,6 +24,7 @@ import com.seback.moviedbcompose.ui.common.LoadingContentLazy
 import com.seback.moviedbcompose.ui.common.MovieCard
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun HomeScreen(
@@ -102,7 +103,8 @@ fun HomeGridPreview() {
                     id = it,
                     title = "Movie Some $it",
                     posterPath = "",
-                    voteAverage = 10.0 / it
+                    voteAverage = 10.0 / it,
+                    releaseDate = LocalDate.parse("2021-01-01")
                 )
             })
     ).collectAsLazyPagingItems()

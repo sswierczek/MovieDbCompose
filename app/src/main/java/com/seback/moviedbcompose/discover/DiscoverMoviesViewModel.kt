@@ -40,6 +40,8 @@ class DiscoverMoviesViewModel @Inject constructor(
     private val _genres: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
     val genres: StateFlow<List<String>> = _genres
 
+    private val _sortOrder: MutableStateFlow<SortOption> = MutableStateFlow(SortOption.Rating)
+
     private var searchJob: Job? = null
 
     init {
@@ -66,6 +68,7 @@ class DiscoverMoviesViewModel @Inject constructor(
                 .flowOn(Dispatchers.IO)
                 .collect {
                     _result.value = it
+                    sortOrderChanged(_sortOrder.value)
                 }
         }
     }
@@ -106,6 +109,17 @@ class DiscoverMoviesViewModel @Inject constructor(
     }
 
     fun sortOrderChanged(newOrder: SortOption) {
-        TODO("Not yet implemented")
+        _sortOrder.value = newOrder
+        if (_searchQuery.value.isNotEmpty()) {
+            val result = _result.value
+            if (result is Response.Success) {
+                val sortedData = when (newOrder) {
+                    SortOption.Alphabetical -> result.data.sortedBy { it.title }
+                    SortOption.Newest -> result.data.sortedByDescending { it.releaseDate }
+                    SortOption.Rating -> result.data.sortedByDescending { it.voteAverage }
+                }
+                _result.value = Response.Success(sortedData)
+            }
+        }
     }
 }

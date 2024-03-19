@@ -22,6 +22,7 @@ import coil.compose.AsyncImage
 import com.seback.moviedbcompose.R
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun MovieCard(
@@ -78,7 +79,8 @@ fun MovieCardPreview() {
                 title = "Some Movie",
                 backdropPath = "",
                 posterPath = "",
-                voteAverage = 8.9
+                voteAverage = 8.9,
+                releaseDate = LocalDate.parse("2021-01-01")
             ),
             isFav = true,
             onFavClick = {}

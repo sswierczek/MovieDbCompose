@@ -33,6 +33,7 @@ import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.home.HomeViewModel
 import com.seback.moviedbcompose.ui.common.Rating
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.datetime.LocalDate
 
 data class Section(
     val title: String,
@@ -161,43 +162,50 @@ class TvActivity : ComponentActivity() {
             id = 0,
             title = "Movie Some 1",
             posterPath = "",
-            voteAverage = 5.5
+            voteAverage = 5.5,
+            releaseDate = LocalDate.parse("2021-01-01")
         ),
         Movie(
             id = 1,
             title = "Some movie 2",
             posterPath = "",
-            voteAverage = 5.5
+            voteAverage = 5.5,
+            releaseDate = LocalDate.parse("2021-01-01")
         ),
         Movie(
             id = 2,
             title = "Some movie 3",
             posterPath = "",
-            voteAverage = 5.5
+            voteAverage = 5.5,
+            releaseDate = LocalDate.parse("2021-01-01")
         ),
         Movie(
             id = 3,
             title = "Some movie 4",
             posterPath = "",
-            voteAverage = 5.5
+            voteAverage = 5.5,
+            releaseDate = LocalDate.parse("2021-01-01")
         ),
         Movie(
             id = 4,
             title = "Some movie 5",
             posterPath = "",
-            voteAverage = 5.5
+            voteAverage = 5.5,
+            releaseDate = LocalDate.parse("2021-01-01")
         ),
         Movie(
             id = 5,
             title = "Some movie 6",
             posterPath = "",
-            voteAverage = 5.5
+            voteAverage = 5.5,
+            releaseDate = LocalDate.parse("2021-01-01")
         ),
         Movie(
             id = 6,
             title = "Some movie 7 long text even longer than this",
             posterPath = "",
-            voteAverage = 5.5
+            voteAverage = 5.5,
+            releaseDate = LocalDate.parse("2021-01-01")
         )
     )
 }

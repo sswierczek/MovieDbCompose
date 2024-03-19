@@ -19,7 +19,8 @@ data class MovieDetails(
         title,
         posterPath,
         backdropPath,
-        vote
+        vote,
+        releaseDate
     )
 }
 

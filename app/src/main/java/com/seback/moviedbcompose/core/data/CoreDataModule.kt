@@ -3,6 +3,7 @@ package com.seback.moviedbcompose.core.data
 import android.content.Context
 import androidx.room.Room
 import com.seback.moviedbcompose.core.data.room.AppDatabase
+import com.seback.moviedbcompose.core.data.room.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +21,6 @@ object CoreDataModule {
         return Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "moviedb-database"
-        ).build()
+        ).addMigrations(MIGRATION_1_2).build()
     }
 }

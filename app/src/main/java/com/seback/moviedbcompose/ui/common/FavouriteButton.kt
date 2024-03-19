@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun FavouriteButton(
@@ -38,6 +39,12 @@ fun FavouriteButton(
 @Composable
 fun FavPreview() {
     MovieDbComposeTheme {
-        FavouriteButton(movie = Movie(id = 0, title = "", voteAverage = 0.0), isFav = true, onFavClick = {})
+        FavouriteButton(movie = Movie(
+            id = 0, title = "",
+            voteAverage = 0.0,
+            releaseDate = LocalDate.parse("1999-01-01")
+        ),
+            isFav = true,
+            onFavClick = {})
     }
 }

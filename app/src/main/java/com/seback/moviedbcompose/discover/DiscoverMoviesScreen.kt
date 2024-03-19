@@ -49,7 +49,7 @@ fun DiscoverMoviesScreen(
         SortButton(
             modifier = Modifier
                 .align(Alignment.End)
-                .padding(16.dp),
+                .padding(end = 24.dp),
             text = "Sort by",
             selectedSortOrder = selectedSortOrder.value,
             onSelectedSortOrderChange = { newOrder ->

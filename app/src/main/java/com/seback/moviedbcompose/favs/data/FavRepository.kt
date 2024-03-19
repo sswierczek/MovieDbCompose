@@ -33,5 +33,6 @@ private fun Movie.toFavMovie(): FavMovie = FavMovie(
     title = title,
     posterPath = posterPath,
     backdropPath = backdropPath,
-    voteAverage = voteAverage
+    voteAverage = voteAverage,
+    releaseDate = releaseDate.toString()
 )
