@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,7 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.seback.moviedbcompose.R
+import com.seback.moviedbcompose.core.data.models.Genre
 import com.seback.moviedbcompose.core.data.models.Movie
+import com.seback.moviedbcompose.discover.data.DiscoverOptions
 import com.seback.moviedbcompose.ui.common.LoadingContent
 import com.seback.moviedbcompose.ui.common.MovieCard
 import com.seback.moviedbcompose.ui.common.SearchBar
@@ -37,6 +40,9 @@ fun DiscoverMoviesScreen(
     val genres by viewModel.genres.collectAsState()
     val favs by viewModel.favs.collectAsState()
     val selectedSortOrder = remember { mutableStateOf<SortOption>(SortOption.Rating) }
+    val selectedGenres = remember { mutableStateOf(emptyList<Genre>()) }
+    val selectedStartYear = remember { mutableIntStateOf(2022) }
+    val selectedEndYear = remember { mutableIntStateOf(2022) }
 
     Column(modifier = modifier) {
         SearchBar(
@@ -64,7 +70,22 @@ fun DiscoverMoviesScreen(
         )
         DiscoverFilterScreen(
             modifier = Modifier,
-            genres = genres
+            genres = genres,
+            selectedGenres = selectedGenres.value,
+            selectedStartYear = selectedStartYear.intValue,
+            selectedEndYear = selectedEndYear.intValue,
+            onSelectedGenresChange = { selectedGenres.value = it },
+            onSelectedStartChange = { selectedStartYear.intValue = it },
+            onSelectedEndYearChange = { selectedEndYear.intValue = it },
+            onDiscoverClick = {
+                viewModel.discoverBy(
+                    DiscoverOptions(
+                        selectedGenres = selectedGenres.value,
+                        selectedStartYear = selectedStartYear.intValue,
+                        selectedEndYear = selectedEndYear.intValue
+                    )
+                )
+            }
         )
         LoadingContent(modifier = Modifier,
             response = movies,

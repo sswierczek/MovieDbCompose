@@ -3,8 +3,11 @@ package com.seback.moviedbcompose.discover
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seback.moviedbcompose.core.data.models.Genre
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
+import com.seback.moviedbcompose.discover.data.DiscoverOptions
+import com.seback.moviedbcompose.discover.usecases.DiscoverNewMoviesUseCase
 import com.seback.moviedbcompose.discover.usecases.GenresListUseCase
 import com.seback.moviedbcompose.discover.usecases.SearchUseCase
 import com.seback.moviedbcompose.favs.data.FavMovieUseCase
@@ -25,7 +28,8 @@ class DiscoverMoviesViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val searchUseCase: SearchUseCase,
     private val favUseCase: FavMovieUseCase,
-    private val genresListUseCase: GenresListUseCase
+    private val genresListUseCase: GenresListUseCase,
+    private val discoverNewMoviesUseCase: DiscoverNewMoviesUseCase
 ) : ViewModel() {
 
     private val _favs: MutableStateFlow<List<Movie>> = MutableStateFlow(emptyList())
@@ -37,8 +41,8 @@ class DiscoverMoviesViewModel @Inject constructor(
         MutableStateFlow(Response.Success(emptyList()))
     val result: StateFlow<Response<List<Movie>>> = _result
 
-    private val _genres: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
-    val genres: StateFlow<List<String>> = _genres
+    private val _genres: MutableStateFlow<List<Genre>> = MutableStateFlow(emptyList())
+    val genres: StateFlow<List<Genre>> = _genres
 
     private val _sortOrder: MutableStateFlow<SortOption> = MutableStateFlow(SortOption.Rating)
 
@@ -108,18 +112,27 @@ class DiscoverMoviesViewModel @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    fun discoverBy(options: DiscoverOptions) {
+        searchJob = viewModelScope.launch {
+            discoverNewMoviesUseCase.execute(options)
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _result.value = it
+                    sortOrderChanged(_sortOrder.value)
+                }
+        }
+    }
+
     fun sortOrderChanged(newOrder: SortOption) {
         _sortOrder.value = newOrder
-        if (_searchQuery.value.isNotEmpty()) {
-            val result = _result.value
-            if (result is Response.Success) {
-                val sortedData = when (newOrder) {
-                    SortOption.Alphabetical -> result.data.sortedBy { it.title }
-                    SortOption.Newest -> result.data.sortedByDescending { it.releaseDate }
-                    SortOption.Rating -> result.data.sortedByDescending { it.voteAverage }
-                }
-                _result.value = Response.Success(sortedData)
+        val result = _result.value
+        if (result is Response.Success && result.data.isNotEmpty()) {
+            val sortedData = when (newOrder) {
+                SortOption.Alphabetical -> result.data.sortedBy { it.title }
+                SortOption.Newest -> result.data.sortedByDescending { it.releaseDate }
+                SortOption.Rating -> result.data.sortedByDescending { it.voteAverage }
             }
+            _result.value = Response.Success(sortedData)
         }
     }
 }

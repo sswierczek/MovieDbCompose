@@ -11,26 +11,29 @@ import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.seback.moviedbcompose.core.data.models.Genre
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 import java.util.Calendar
-
 
 @Composable
 fun MultiSelectDropdown(
     text: String,
-    values: List<String>,
-    selectedValues: List<String>,
-    onSelectedValuesChange: (List<String>) -> Unit
+    values: List<Genre>,
+    selectedValues: List<Genre>,
+    onSelectedValuesChange: (List<Genre>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box {
@@ -52,7 +55,7 @@ fun MultiSelectDropdown(
                     }
                 }) {
                     Checkbox(checked = isSelected, onCheckedChange = null)
-                    Text(text = value, modifier = Modifier.padding(start = 8.dp))
+                    Text(text = value.name, modifier = Modifier.padding(start = 8.dp))
                 }
             }
         }
@@ -89,15 +92,16 @@ fun YearDropdown(
 }
 
 @Composable
-fun DiscoverFilters(
+fun DiscoverFilterScreen(
     modifier: Modifier,
-    genres: List<String>,
-    selectedGenres: List<String>,
-    onSelectedGenresChange: (List<String>) -> Unit,
+    genres: List<Genre>,
+    selectedGenres: List<Genre>,
+    onSelectedGenresChange: (List<Genre>) -> Unit,
     selectedStartYear: Int,
     onSelectedStartChange: (Int) -> Unit,
     selectedEndYear: Int,
-    onSelectedEndYearChange: (Int) -> Unit
+    onSelectedEndYearChange: (Int) -> Unit,
+    onDiscoverClick: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -126,32 +130,30 @@ fun DiscoverFilters(
                 selectedYear = selectedEndYear,
                 onSelectedYearChange = onSelectedEndYearChange
             )
+            IconButton(onClick = { onDiscoverClick() }) {
+                Icon(Icons.Default.RocketLaunch, contentDescription = "Discover")
+            }
         }
     }
-}
-
-@Composable
-fun DiscoverFilterScreen(modifier: Modifier, genres: List<String>) {
-    val selectedGenres = remember { mutableStateOf(emptyList<String>()) }
-    val selectedStartYear = remember { mutableIntStateOf(2022) }
-    val selectedEndYear = remember { mutableIntStateOf(2022) }
-
-    DiscoverFilters(
-        modifier = modifier,
-        selectedGenres = selectedGenres.value,
-        genres = genres,
-        onSelectedGenresChange = { newGenres -> selectedGenres.value = newGenres },
-        selectedStartYear = selectedStartYear.intValue,
-        onSelectedStartChange = { newStart -> selectedStartYear.intValue = newStart },
-        selectedEndYear = selectedEndYear.intValue,
-        onSelectedEndYearChange = { newEnd -> selectedEndYear.intValue = newEnd },
-    )
 }
 
 @Composable
 @Preview(showBackground = true)
 fun DiscoverFiltersPreview() {
     MovieDbComposeTheme {
-        DiscoverFilterScreen(Modifier.fillMaxSize(), listOf("Horror", "Drama", "Comedy"))
+        DiscoverFilterScreen(
+            Modifier.fillMaxSize(),
+            genres = listOf(
+                Genre(1, "Horror"),
+                Genre(2, "Drama"),
+                Genre(3, "Comedy")
+            ),
+            selectedGenres = emptyList(),
+            onSelectedGenresChange = {},
+            selectedStartYear = 2022,
+            onSelectedStartChange = {},
+            selectedEndYear = 2022,
+            onSelectedEndYearChange = {},
+            onDiscoverClick = {})
     }
 }

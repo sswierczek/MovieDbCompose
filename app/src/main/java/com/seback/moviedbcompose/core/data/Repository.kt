@@ -1,8 +1,10 @@
 package com.seback.moviedbcompose.core.data
 
+import com.seback.moviedbcompose.core.data.models.Genre
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.MovieDetails
 import com.seback.moviedbcompose.core.data.models.Response
+import com.seback.moviedbcompose.discover.data.DiscoverOptions
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -25,8 +27,11 @@ interface Repository {
 
     interface Discover {
         fun search(query: String, page: Int): Flow<Response<List<Movie>>>
-        fun discover(page: Int): Flow<Response<List<Movie>>>
-        fun genres(): Flow<Response<List<String>>>
+        fun genres(): Flow<Response<List<Genre>>>
+        fun discover(
+            page: Int,
+            options: DiscoverOptions?
+        ): Flow<Response<List<Movie>>>
     }
 
     interface Details {
