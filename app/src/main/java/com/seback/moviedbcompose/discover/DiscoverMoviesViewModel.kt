@@ -83,7 +83,17 @@ class DiscoverMoviesViewModel @Inject constructor(
             discoverNewMoviesUseCase.execute(options, sortOption)
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    _result.value = it
+                    _result.value = if (it is Response.Success && it.data.isNotEmpty()) {
+                        val sortedData = when (sortOption) {
+                            SortOption.Alphabetical -> it.data.sortedBy { it.title }
+                            SortOption.Newest -> it.data.sortedByDescending { it.releaseDate }
+                            SortOption.Rating -> it.data.sortedByDescending { it.voteAverage }
+                            else -> it.data
+                        }
+                        Response.Success(sortedData)
+                    } else {
+                        it
+                    }
                 }
         }
     }
