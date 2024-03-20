@@ -37,7 +37,7 @@ class DiscoverRepository @Inject constructor(
             service.discoverMovies(
                 page = page,
                 sortBy = sortOption.toApiSortBy().value,
-                genres = options?.selectedGenres?.map { it.id },
+                genres = options?.selectedGenres?.map { it.id }?.joinToString(separator = "|"),
                 yearStart = options?.selectedStartYear.yearToDate(),
                 yearEnd = if (options?.selectedStartYear == options?.selectedEndYear) null else options?.selectedEndYear.yearToDate(),
                 apiKey = networkConfig.apiKey
