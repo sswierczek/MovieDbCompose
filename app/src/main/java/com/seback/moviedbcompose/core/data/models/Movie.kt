@@ -1,6 +1,7 @@
 package com.seback.moviedbcompose.core.data.models
 
 import com.seback.moviedbcompose.core.data.api.ApiMovie
+import com.seback.moviedbcompose.ui.common.SortOption
 import kotlinx.datetime.LocalDate
 
 data class Movie(
@@ -34,3 +35,11 @@ fun ApiMovie.map(): Movie {
         date
     )
 }
+
+fun Response.Success<List<Movie>>.sortDataBy(sortOption: SortOption): Response.Success<List<Movie>> =
+    Response.Success(when (sortOption) {
+        SortOption.Alphabetical -> data.sortedBy { it.title }
+        SortOption.Newest -> data.sortedByDescending { it.releaseDate }
+        SortOption.Rating -> data.sortedByDescending { it.voteAverage }
+        else -> data // TODO map popularity from API to be able to sort
+    })

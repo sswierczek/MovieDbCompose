@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.seback.moviedbcompose.core.data.models.Genre
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
+import com.seback.moviedbcompose.core.data.models.sortDataBy
 import com.seback.moviedbcompose.discover.data.DiscoverOptions
 import com.seback.moviedbcompose.discover.usecases.DiscoverNewMoviesUseCase
 import com.seback.moviedbcompose.discover.usecases.GenresListUseCase
@@ -83,14 +84,8 @@ class DiscoverMoviesViewModel @Inject constructor(
             discoverNewMoviesUseCase.execute(options, sortOption)
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    _result.value = if (it is Response.Success && it.data.isNotEmpty()) {
-                        val sortedData = when (sortOption) {
-                            SortOption.Alphabetical -> it.data.sortedBy { it.title }
-                            SortOption.Newest -> it.data.sortedByDescending { it.releaseDate }
-                            SortOption.Rating -> it.data.sortedByDescending { it.voteAverage }
-                            else -> it.data
-                        }
-                        Response.Success(sortedData)
+                    _result.value = if (it is Response.Success) {
+                        it.sortDataBy(sortOption = sortOption)
                     } else {
                         it
                     }

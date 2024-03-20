@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
+import com.seback.moviedbcompose.core.data.models.sortDataBy
 import com.seback.moviedbcompose.favs.data.FavMovieUseCase
 import com.seback.moviedbcompose.search.usecases.SearchUseCase
 import com.seback.moviedbcompose.ui.common.SortOption
@@ -91,17 +92,11 @@ class SearchViewModel @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    fun sortOrderChanged(newOrder: SortOption) {
-        _sortOrder.value = newOrder
+    fun sortOrderChanged(sortOption: SortOption) {
+        _sortOrder.value = sortOption
         val result = _result.value
-        if (result is Response.Success && result.data.isNotEmpty()) {
-            val sortedData = when (newOrder) {
-                SortOption.Alphabetical -> result.data.sortedBy { it.title }
-                SortOption.Newest -> result.data.sortedByDescending { it.releaseDate }
-                SortOption.Rating -> result.data.sortedByDescending { it.voteAverage }
-                else -> result.data // TODO map popularity from API to be able to sort
-            }
-            _result.value = Response.Success(sortedData)
+        if (result is Response.Success) {
+            _result.value = result.sortDataBy(sortOption = sortOption)
         }
     }
 }
