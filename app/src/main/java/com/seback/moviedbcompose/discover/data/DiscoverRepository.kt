@@ -2,12 +2,14 @@ package com.seback.moviedbcompose.discover.data
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.seback.moviedbcompose.core.data.Repository
+import com.seback.moviedbcompose.core.data.api.ApiSortBy
 import com.seback.moviedbcompose.core.data.models.Genre
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.core.data.models.map
 import com.seback.moviedbcompose.core.data.models.unknownError
 import com.seback.moviedbcompose.core.network.NetworkConfig
+import com.seback.moviedbcompose.ui.common.SortOption
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -26,13 +28,15 @@ class DiscoverRepository @Inject constructor(
 
     override fun discover(
         page: Int,
-        options: DiscoverOptions?
+        options: DiscoverOptions?,
+        sortOption: SortOption
     ): Flow<Response<List<Movie>>> = flow {
         Timber.d("discover [${Thread.currentThread().name}]")
 
         when (val response =
             service.discoverMovies(
                 page = page,
+                sortBy = sortOption.toApiSortBy().value,
                 genres = options?.selectedGenres?.map { it.id },
                 yearStart = options?.selectedStartYear.yearToDate(),
                 yearEnd = if (options?.selectedStartYear == options?.selectedEndYear) null else options?.selectedEndYear.yearToDate(),
@@ -73,4 +77,13 @@ class DiscoverRepository @Inject constructor(
 
 private fun Int?.yearToDate(): String {
     return LocalDate(this ?: 1990, 1, 1).toString()
+}
+
+private fun SortOption.toApiSortBy(): ApiSortBy {
+    return when (this) {
+        SortOption.Alphabetical -> ApiSortBy.ORIGINAL_TITLE_ASC
+        SortOption.Popularity -> ApiSortBy.POPULARITY_DESC
+        SortOption.Newest -> ApiSortBy.RELEASE_DATE_DESC
+        SortOption.Rating -> ApiSortBy.VOTE_COUNT_DESC
+    }
 }

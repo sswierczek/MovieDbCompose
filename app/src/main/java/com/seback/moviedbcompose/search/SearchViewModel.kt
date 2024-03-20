@@ -99,6 +99,7 @@ class SearchViewModel @Inject constructor(
                 SortOption.Alphabetical -> result.data.sortedBy { it.title }
                 SortOption.Newest -> result.data.sortedByDescending { it.releaseDate }
                 SortOption.Rating -> result.data.sortedByDescending { it.voteAverage }
+                else -> result.data // TODO map popularity from API to be able to sort
             }
             _result.value = Response.Success(sortedData)
         }

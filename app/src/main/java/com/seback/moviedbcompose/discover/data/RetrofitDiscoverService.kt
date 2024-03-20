@@ -13,9 +13,10 @@ interface RetrofitDiscoverService {
     suspend fun discoverMovies(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int,
+        @Query("sort_by") sortBy: String,
         @Query("with_genres") genres: List<Int>? = null,
-        @Query("release_date.gte") yearStart: String? = null,
-        @Query("release_date.lte") yearEnd: String? = null
+        @Query("primary_release_date.gte") yearStart: String? = null,
+        @Query("primary_release_date.lte") yearEnd: String? = null
     ): NetworkResponse<ApiMovieResult, ApiErrorResponse>
 
     @GET("genre/movie/list")

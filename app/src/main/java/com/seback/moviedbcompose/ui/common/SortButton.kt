@@ -23,9 +23,10 @@ import androidx.compose.ui.unit.dp
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 
 sealed class SortOption(val name: String) {
-    object Alphabetical : SortOption("Alphabetical")
-    object Newest : SortOption("Newest")
-    object Rating : SortOption("Rating")
+    data object Alphabetical : SortOption("Alphabetical")
+    data object Newest : SortOption("Newest")
+    data object Popularity : SortOption("Popularity")
+    data object Rating : SortOption("Rating")
 }
 
 @Composable
@@ -97,6 +98,7 @@ fun FilterButtonPreview() {
             sortOptions = listOf(
                 SortOption.Alphabetical,
                 SortOption.Newest,
+                SortOption.Popularity,
                 SortOption.Rating
             )
         )

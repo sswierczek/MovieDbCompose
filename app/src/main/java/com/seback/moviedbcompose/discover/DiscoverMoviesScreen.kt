@@ -35,6 +35,12 @@ fun DiscoverMoviesScreen(
     val selectedStartYear = remember { mutableIntStateOf(2022) }
     val selectedEndYear = remember { mutableIntStateOf(2022) }
 
+    fun discoverOptions() = DiscoverOptions(
+        selectedGenres = selectedGenres.value,
+        selectedStartYear = selectedStartYear.intValue,
+        selectedEndYear = selectedEndYear.intValue
+    )
+
     Column(modifier = modifier) {
         SortButton(
             modifier = Modifier
@@ -42,12 +48,13 @@ fun DiscoverMoviesScreen(
                 .padding(end = 24.dp),
             text = "Sort by",
             selectedSortOrder = selectedSortOrder.value,
-            onSelectedSortOrderChange = { newOrder ->
-                selectedSortOrder.value = newOrder
-                viewModel.sortOrderChanged(newOrder)
+            onSelectedSortOrderChange = { sortOrder ->
+                selectedSortOrder.value = sortOrder
+                viewModel.sortOrderChanged(discoverOptions(), sortOrder)
             },
             sortOptions = listOf(
                 SortOption.Alphabetical,
+                SortOption.Popularity,
                 SortOption.Newest,
                 SortOption.Rating
             )
@@ -62,13 +69,7 @@ fun DiscoverMoviesScreen(
             onSelectedStartChange = { selectedStartYear.intValue = it },
             onSelectedEndYearChange = { selectedEndYear.intValue = it },
             onDiscoverClick = {
-                viewModel.discoverBy(
-                    DiscoverOptions(
-                        selectedGenres = selectedGenres.value,
-                        selectedStartYear = selectedStartYear.intValue,
-                        selectedEndYear = selectedEndYear.intValue
-                    )
-                )
+                viewModel.discoverBy(discoverOptions())
             }
         )
         LoadingContent(modifier = Modifier,
@@ -83,6 +84,5 @@ fun DiscoverMoviesScreen(
                 onFavClick = viewModel::favSwitch
             )
         }
-
     }
 }

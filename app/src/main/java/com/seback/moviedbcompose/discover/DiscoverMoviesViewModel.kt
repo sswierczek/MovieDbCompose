@@ -78,27 +78,18 @@ class DiscoverMoviesViewModel @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    fun discoverBy(options: DiscoverOptions) {
+    fun discoverBy(options: DiscoverOptions, sortOption: SortOption = _sortOrder.value) {
         searchJob = viewModelScope.launch {
-            discoverNewMoviesUseCase.execute(options)
+            discoverNewMoviesUseCase.execute(options, sortOption)
                 .flowOn(Dispatchers.IO)
                 .collect {
                     _result.value = it
-                    sortOrderChanged(_sortOrder.value)
                 }
         }
     }
 
-    fun sortOrderChanged(newOrder: SortOption) {
-        _sortOrder.value = newOrder
-        val result = _result.value
-        if (result is Response.Success && result.data.isNotEmpty()) {
-            val sortedData = when (newOrder) {
-                SortOption.Alphabetical -> result.data.sortedBy { it.title }
-                SortOption.Newest -> result.data.sortedByDescending { it.releaseDate }
-                SortOption.Rating -> result.data.sortedByDescending { it.voteAverage }
-            }
-            _result.value = Response.Success(sortedData)
-        }
+    fun sortOrderChanged(options: DiscoverOptions, sortOption: SortOption) {
+        _sortOrder.value = sortOption
+        discoverBy(options, sortOption)
     }
 }

@@ -4,6 +4,7 @@ import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.discover.data.DiscoverOptions
+import com.seback.moviedbcompose.ui.common.SortOption
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -12,8 +13,9 @@ class DiscoverNewMoviesUseCase @Inject constructor(
 ) {
 
     fun execute(
-        options: DiscoverOptions?
+        options: DiscoverOptions?,
+        sortOption: SortOption
     ): Flow<Response<List<Movie>>> {
-        return repository.discover(page = 1, options) // TODO Add paging
+        return repository.discover(page = 1, options, sortOption) // TODO Add paging
     }
 }

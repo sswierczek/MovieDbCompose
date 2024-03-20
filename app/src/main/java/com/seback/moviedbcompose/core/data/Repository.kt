@@ -5,6 +5,7 @@ import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.MovieDetails
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.discover.data.DiscoverOptions
+import com.seback.moviedbcompose.ui.common.SortOption
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -33,7 +34,8 @@ interface Repository {
         fun genres(): Flow<Response<List<Genre>>>
         fun discover(
             page: Int,
-            options: DiscoverOptions?
+            options: DiscoverOptions?,
+            sortOption: SortOption
         ): Flow<Response<List<Movie>>>
     }
 
