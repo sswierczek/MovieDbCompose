@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.seback.moviedbcompose.R
 
@@ -14,7 +15,7 @@ sealed class BottomNavigationItem(
     val icon: ImageVector
 ) {
     object Home : BottomNavigationItem("home", R.string.home, Icons.Default.Home)
-
+    object Search : BottomNavigationItem("search", R.string.search, Icons.Default.Search)
     object Discover : BottomNavigationItem("discover", R.string.discover, Icons.Default.Movie)
     object Favourites : BottomNavigationItem("favs", R.string.favs, Icons.Default.Favorite)
 }

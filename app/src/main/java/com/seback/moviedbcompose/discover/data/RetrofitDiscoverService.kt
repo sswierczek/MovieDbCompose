@@ -18,13 +18,6 @@ interface RetrofitDiscoverService {
         @Query("release_date.lte") yearEnd: String? = null
     ): NetworkResponse<ApiMovieResult, ApiErrorResponse>
 
-    @GET("search/movie")
-    suspend fun search(
-        @Query("query") query: String,
-        @Query("api_key") apiKey: String,
-        @Query("page") page: Int
-    ): NetworkResponse<ApiMovieResult, ApiErrorResponse>
-
     @GET("genre/movie/list")
     suspend fun genres(
         @Query("api_key") apiKey: String,

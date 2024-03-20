@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 
 val bottomNavigationItems = listOf(
     BottomNavigationItem.Home,
+    BottomNavigationItem.Search,
     BottomNavigationItem.Discover,
     BottomNavigationItem.Favourites
 )

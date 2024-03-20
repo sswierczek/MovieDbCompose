@@ -2,6 +2,7 @@
     <string name="app_name">Discover movies</string>
 
     <string name="latest">Latest</string>
+    <string name="search">Search</string>
     <string name="discover">Discover</string>
     <string name="favs">Favourites</string>
     <string name="try_agin">TRY AGAIN</string>
@@ -12,5 +13,5 @@
     <string name="popular">Popular</string>
     <string name="top">Top</string>
     <string name="upcoming">Upcoming</string>
-    <string name="search">What will you watch today?</string>
+    <string name="search_hint">What will you watch today?</string>
 </resources>

@@ -8,34 +8,21 @@ import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.core.data.models.map
 import com.seback.moviedbcompose.core.data.models.unknownError
 import com.seback.moviedbcompose.core.network.NetworkConfig
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.LocalDate
 import retrofit2.Retrofit
 import timber.log.Timber
+import javax.inject.Inject
 
-class DiscoverRepository(
+@ViewModelScoped
+class DiscoverRepository @Inject constructor(
     retrofit: Retrofit,
     private val networkConfig: NetworkConfig
 ) : Repository.Discover {
 
     private val service = retrofit.create(RetrofitDiscoverService::class.java)
-    override fun search(query: String, page: Int): Flow<Response<List<Movie>>> = flow {
-        when (val response =
-            service.search(query = query, page = page, apiKey = networkConfig.apiKey)) {
-            is NetworkResponse.Success -> {
-                emit(Response.Success(response.body.results.map { it.map() }))
-            }
-
-            is NetworkResponse.Error -> {
-                emit(Response.Error(response.error.message, response.error))
-            }
-
-            else -> {
-                emit(unknownError())
-            }
-        }
-    }
 
     override fun discover(
         page: Int,

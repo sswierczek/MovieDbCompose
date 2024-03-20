@@ -1,10 +1,6 @@
 package com.seback.moviedbcompose.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,15 +9,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.ui.common.LoadingContentLazy
-import com.seback.moviedbcompose.ui.common.MovieCard
+import com.seback.moviedbcompose.ui.common.PagedMoviesGrid
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.LocalDate
@@ -52,42 +46,13 @@ fun HomeScreen(
         LoadingContentLazy(modifier = Modifier, response = movies, onRetry = {
             movies.retry()
         })
-        HomeGrid(
+        PagedMoviesGrid(
             modifier = Modifier,
             movies = movies,
             onMovieDetails = onMovieDetails,
             favs = favs,
             onFavClick = viewModel::favSwitch
         )
-    }
-}
-
-@Composable
-fun HomeGrid(
-    modifier: Modifier = Modifier,
-    movies: LazyPagingItems<Movie>,
-    onMovieDetails: (Movie) -> Unit,
-    favs: List<Movie>,
-    onFavClick: (Movie) -> Unit
-) {
-    LazyVerticalGrid(
-        modifier = modifier,
-        contentPadding = PaddingValues(8.dp),
-        columns = GridCells.Adaptive(minSize = 150.dp)
-    ) {
-        items(movies.itemCount)
-        { index ->
-            movies[index]?.let { item ->
-                MovieCard(
-                    modifier = Modifier.clickable {
-                        onMovieDetails(item)
-                    },
-                    movie = item,
-                    isFav = favs.contains(item),
-                    onFavClick = onFavClick
-                )
-            }
-        }
     }
 }
 
@@ -110,7 +75,7 @@ fun HomeGridPreview() {
     ).collectAsLazyPagingItems()
 
     MovieDbComposeTheme {
-        HomeGrid(
+        PagedMoviesGrid(
             movies = items,
             onMovieDetails = {},
             onFavClick = {},

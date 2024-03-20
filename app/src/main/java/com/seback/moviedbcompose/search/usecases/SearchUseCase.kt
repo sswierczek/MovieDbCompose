@@ -1,4 +1,4 @@
-package com.seback.moviedbcompose.discover.usecases
+package com.seback.moviedbcompose.search.usecases
 
 import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.data.models.Movie
@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 
 class SearchUseCase @Inject constructor(
-    private val repository: Repository.Discover
+    private val repository: Repository.Search
 ) {
 
     fun execute(query: String): Flow<Response<List<Movie>>> {

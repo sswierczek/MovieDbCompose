@@ -23,9 +23,16 @@ class HomeRepository(
         Timber.d("fetch $type [${Thread.currentThread().name}]")
         val response = when (type) {
             Repository.Home.HomeDataType.LATEST -> service.latest(page = page, apiKey = networkConfig.apiKey)
-            Repository.Home.HomeDataType.POPULAR -> service.popular(page = page, apiKey = networkConfig.apiKey)
+            Repository.Home.HomeDataType.POPULAR -> service.popular(
+                page = page,
+                apiKey = networkConfig.apiKey
+            )
+
             Repository.Home.HomeDataType.TOP -> service.top(page = page, apiKey = networkConfig.apiKey)
-            Repository.Home.HomeDataType.UPCOMING -> service.upcoming(page = page, apiKey = networkConfig.apiKey)
+            Repository.Home.HomeDataType.UPCOMING -> service.upcoming(
+                page = page,
+                apiKey = networkConfig.apiKey
+            )
         }
         when (response) {
             is NetworkResponse.Success -> {

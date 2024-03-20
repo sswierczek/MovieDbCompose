@@ -25,8 +25,11 @@ interface Repository {
         fun fetch(type: HomeDataType, page: Int): Flow<Response<List<Movie>>>
     }
 
-    interface Discover {
+    interface Search {
         fun search(query: String, page: Int): Flow<Response<List<Movie>>>
+    }
+
+    interface Discover {
         fun genres(): Flow<Response<List<Genre>>>
         fun discover(
             page: Int,
