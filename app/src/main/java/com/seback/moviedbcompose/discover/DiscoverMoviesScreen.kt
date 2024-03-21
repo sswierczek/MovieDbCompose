@@ -1,12 +1,18 @@
 package com.seback.moviedbcompose.discover
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +40,7 @@ fun DiscoverMoviesScreen(
     val selectedGenres = rememberSaveable { mutableStateOf(emptyList<Genre>()) }
     val selectedStartYear = rememberSaveable { mutableIntStateOf(2022) }
     val selectedEndYear = rememberSaveable { mutableIntStateOf(2022) }
+    val isFilterVisible = remember { mutableStateOf(true) }
 
     fun discoverOptions() = DiscoverOptions(
         selectedGenres = selectedGenres.value,
@@ -42,10 +49,31 @@ fun DiscoverMoviesScreen(
     )
 
     Column(modifier = modifier) {
+        AnimatedVisibility(
+            visible = isFilterVisible.value,
+            enter = slideInVertically(initialOffsetY = { -it }),
+            exit = slideOutVertically(targetOffsetY = { -it }, animationSpec = tween(250))
+        ) {
+            DiscoverFilterScreen(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                genres = genres,
+                selectedGenres = selectedGenres.value,
+                selectedStartYear = selectedStartYear.intValue,
+                selectedEndYear = selectedEndYear.intValue,
+                onSelectedGenresChange = { selectedGenres.value = it },
+                onSelectedStartChange = { selectedStartYear.intValue = it },
+                onSelectedEndYearChange = { selectedEndYear.intValue = it },
+                onDiscoverClick = {
+                    viewModel.discoverBy(discoverOptions())
+                }
+            )
+        }
         SortButton(
             modifier = Modifier
-                .align(Alignment.End)
-                .padding(end = 24.dp),
+                .padding(end = 16.dp)
+                .align(Alignment.End),
             text = "Sort by",
             selectedSortOrder = selectedSortOrder.value,
             onSelectedSortOrderChange = { sortOrder ->
@@ -59,19 +87,6 @@ fun DiscoverMoviesScreen(
                 SortOption.Rating
             )
         )
-        DiscoverFilterScreen(
-            modifier = Modifier,
-            genres = genres,
-            selectedGenres = selectedGenres.value,
-            selectedStartYear = selectedStartYear.intValue,
-            selectedEndYear = selectedEndYear.intValue,
-            onSelectedGenresChange = { selectedGenres.value = it },
-            onSelectedStartChange = { selectedStartYear.intValue = it },
-            onSelectedEndYearChange = { selectedEndYear.intValue = it },
-            onDiscoverClick = {
-                viewModel.discoverBy(discoverOptions())
-            }
-        )
         LoadingContent(modifier = Modifier,
             response = movies,
             onRetry = viewModel::retry,
@@ -81,7 +96,14 @@ fun DiscoverMoviesScreen(
                 movies = it,
                 onMovieDetails = onMovieDetails,
                 favs = favs,
-                onFavClick = viewModel::favSwitch
+                onFavClick = viewModel::favSwitch,
+                onScrolled = { item ->
+                    if (item > 0) {
+                        isFilterVisible.value = false
+                    } else {
+                        isFilterVisible.value = true
+                    }
+                }
             )
         }
     }

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
@@ -50,12 +50,11 @@ private fun SortDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(modifier = modifier) {
-        IconButton(onClick = { expanded = true }) {
+        OutlinedButton(onClick = { expanded = true }) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(8.dp)
             ) {
-                Text(text = selectedValue.name)
+                Text(text = selectedValue.name, modifier = Modifier.padding(end = 2.dp))
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.Sort,
                     contentDescription = text
@@ -82,7 +81,7 @@ private fun SortDropdown(
 
 @Preview
 @Composable
-fun FilterButtonPreview() {
+fun SortButtonPreview() {
     MovieDbComposeTheme {
         SortButton(
             modifier = Modifier.fillMaxWidth(),

@@ -1,43 +1,44 @@
 package com.seback.moviedbcompose.discover
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.seback.moviedbcompose.core.data.models.Genre
+import com.seback.moviedbcompose.ui.common.ChipWithCloseIcon
+import com.seback.moviedbcompose.ui.common.FilterButton
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
 import java.util.Calendar
 
 @Composable
 fun MultiSelectDropdown(
+    modifier: Modifier = Modifier,
     text: String,
     values: List<Genre>,
     selectedValues: List<Genre>,
-    onSelectedValuesChange: (List<Genre>) -> Unit
+    onSelectedValuesChange: (List<Genre>) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    Box {
-        Button(onClick = { expanded = true }) {
+    Box(modifier = modifier) {
+        OutlinedButton(onClick = { expanded = true }) {
             Text(text = text)
         }
 
@@ -71,7 +72,7 @@ fun YearDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box {
-        Button(onClick = { expanded = true }) {
+        OutlinedButton(onClick = { expanded = true }) {
             Text(text = "$text $selectedYear")
         }
 
@@ -91,6 +92,7 @@ fun YearDropdown(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DiscoverFilterScreen(
     modifier: Modifier,
@@ -105,35 +107,41 @@ fun DiscoverFilterScreen(
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = androidx.compose.ui.Alignment.End
+        horizontalAlignment = Alignment.End
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+        FlowRow(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            MultiSelectDropdown(
-                text = "Genres",
-                values = genres,
-                selectedValues = selectedGenres,
-                onSelectedValuesChange = onSelectedGenresChange
-            )
+            selectedGenres.forEach { genre ->
+                ChipWithCloseIcon(Modifier.padding(2.dp), text = genre.name) {
+                    onSelectedGenresChange(selectedGenres - genre)
+                }
+            }
+        }
+        MultiSelectDropdown(
+            text = if (selectedGenres.isEmpty()) "All genres" else "Select more genres",
+            values = genres,
+            selectedValues = selectedGenres,
+            onSelectedValuesChange = onSelectedGenresChange,
+        )
+        Row {
             YearDropdown(
-                text = "From",
+                text = "From ",
                 range = 1900..Calendar.getInstance().get(Calendar.YEAR),
                 selectedYear = selectedStartYear,
                 onSelectedYearChange = onSelectedStartChange
             )
-
             YearDropdown(
-                text = "To",
+                text = "to ",
                 range = selectedStartYear..Calendar.getInstance().get(Calendar.YEAR),
                 selectedYear = selectedEndYear,
                 onSelectedYearChange = onSelectedEndYearChange
             )
-            IconButton(onClick = { onDiscoverClick() }) {
-                Icon(Icons.Default.RocketLaunch, contentDescription = "Discover")
-            }
         }
+        FilterButton(
+            text = "Filter",
+            onClick = onDiscoverClick,
+        )
     }
 }
 
