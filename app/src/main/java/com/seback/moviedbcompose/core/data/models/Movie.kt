@@ -1,7 +1,7 @@
 package com.seback.moviedbcompose.core.data.models
 
 import com.seback.moviedbcompose.core.data.api.ApiMovie
-import com.seback.moviedbcompose.ui.common.SortOption
+import com.seback.moviedbcompose.ui.data.SortOption
 import kotlinx.datetime.LocalDate
 
 data class Movie(

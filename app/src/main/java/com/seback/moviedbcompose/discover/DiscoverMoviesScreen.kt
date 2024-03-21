@@ -18,7 +18,7 @@ import com.seback.moviedbcompose.discover.data.DiscoverOptions
 import com.seback.moviedbcompose.ui.common.LoadingContent
 import com.seback.moviedbcompose.ui.common.MoviesGrid
 import com.seback.moviedbcompose.ui.common.SortButton
-import com.seback.moviedbcompose.ui.common.SortOption
+import com.seback.moviedbcompose.ui.data.SortOption
 
 @Composable
 fun DiscoverMoviesScreen(

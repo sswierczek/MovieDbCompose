@@ -5,7 +5,7 @@ import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.MovieDetails
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.discover.data.DiscoverOptions
-import com.seback.moviedbcompose.ui.common.SortOption
+import com.seback.moviedbcompose.ui.data.SortOption
 import kotlinx.coroutines.flow.Flow
 
 /**

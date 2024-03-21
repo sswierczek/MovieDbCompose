@@ -8,7 +8,7 @@ import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.core.data.models.sortDataBy
 import com.seback.moviedbcompose.favs.data.FavMovieUseCase
 import com.seback.moviedbcompose.search.usecases.SearchUseCase
-import com.seback.moviedbcompose.ui.common.SortOption
+import com.seback.moviedbcompose.ui.data.SortOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

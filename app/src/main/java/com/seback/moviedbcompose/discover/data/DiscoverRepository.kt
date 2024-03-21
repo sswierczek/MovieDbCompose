@@ -9,7 +9,7 @@ import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.core.data.models.map
 import com.seback.moviedbcompose.core.data.models.unknownError
 import com.seback.moviedbcompose.core.network.NetworkConfig
-import com.seback.moviedbcompose.ui.common.SortOption
+import com.seback.moviedbcompose.ui.data.SortOption
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

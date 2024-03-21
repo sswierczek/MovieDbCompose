@@ -20,14 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.seback.moviedbcompose.ui.data.SortOption
 import com.seback.moviedbcompose.ui.theme.MovieDbComposeTheme
-
-sealed class SortOption(val name: String) {
-    data object Alphabetical : SortOption("Alphabetical")
-    data object Newest : SortOption("Newest")
-    data object Popularity : SortOption("Popularity")
-    data object Rating : SortOption("Rating")
-}
 
 @Composable
 fun SortButton(
