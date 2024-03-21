@@ -2,8 +2,10 @@ package com.seback.moviedbcompose.discover
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -51,8 +53,8 @@ fun DiscoverMoviesScreen(
     Column(modifier = modifier) {
         AnimatedVisibility(
             visible = isFilterVisible.value,
-            enter = slideInVertically(initialOffsetY = { -it }),
-            exit = slideOutVertically(targetOffsetY = { -it }, animationSpec = tween(250))
+            enter = expandVertically(),
+            exit = shrinkVertically(animationSpec = tween(500))
         ) {
             DiscoverFilterScreen(
                 modifier = Modifier

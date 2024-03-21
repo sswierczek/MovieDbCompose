@@ -1,5 +1,6 @@
 package com.seback.moviedbcompose.discover
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -65,13 +66,14 @@ fun MultiSelectDropdown(
 
 @Composable
 fun YearDropdown(
+    modifier: Modifier = Modifier,
     text: String,
     range: IntRange,
     selectedYear: Int,
     onSelectedYearChange: (Int) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    Box {
+    Box(modifier = modifier) {
         OutlinedButton(onClick = { expanded = true }) {
             Text(text = "$text $selectedYear")
         }
@@ -110,6 +112,7 @@ fun DiscoverFilterScreen(
         horizontalAlignment = Alignment.End
     ) {
         FlowRow(
+            horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
             selectedGenres.forEach { genre ->
@@ -126,6 +129,7 @@ fun DiscoverFilterScreen(
         )
         Row {
             YearDropdown(
+                modifier = Modifier.padding(end = 4.dp),
                 text = "From ",
                 range = 1900..Calendar.getInstance().get(Calendar.YEAR),
                 selectedYear = selectedStartYear,
@@ -135,7 +139,7 @@ fun DiscoverFilterScreen(
                 text = "to ",
                 range = selectedStartYear..Calendar.getInstance().get(Calendar.YEAR),
                 selectedYear = selectedEndYear,
-                onSelectedYearChange = onSelectedEndYearChange
+                onSelectedYearChange = onSelectedEndYearChange,
             )
         }
         FilterButton(
