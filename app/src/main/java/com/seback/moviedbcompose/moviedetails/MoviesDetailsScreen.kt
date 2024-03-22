@@ -33,6 +33,9 @@ fun MovieDetailsScreen(
             isFav = isFav,
             onFavClick = {
                 viewModel.onFavClicked()
+            },
+            onRegionSelectionChange = { region ->
+                viewModel.onRegionSelectionChange(region)
             }
         )
     }
@@ -55,7 +58,8 @@ fun MovieDetailsPreview() {
                     releaseDate = LocalDate.parse("2023-02-27")
                 ),
                 isFav = true,
-                onFavClick = {}
+                onFavClick = {},
+                onRegionSelectionChange = {}
             )
         }
     }

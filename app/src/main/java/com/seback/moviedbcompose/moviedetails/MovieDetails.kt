@@ -23,6 +23,7 @@ import coil.compose.AsyncImage
 import com.seback.moviedbcompose.R
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.MovieDetails
+import com.seback.moviedbcompose.core.data.models.MovieRegion
 import com.seback.moviedbcompose.thirdparty.youtube.YouTubePlayer
 import com.seback.moviedbcompose.ui.common.ClickableUrl
 import com.seback.moviedbcompose.ui.common.FavouriteButton
@@ -34,7 +35,8 @@ fun MovieDetails(
     modifier: Modifier,
     movieDetails: MovieDetails,
     isFav: Boolean,
-    onFavClick: (Movie) -> Unit
+    onFavClick: (Movie) -> Unit,
+    onRegionSelectionChange: (MovieRegion) -> Unit
 ) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         AsyncImage(
@@ -91,8 +93,12 @@ fun MovieDetails(
         }
         ProvidersDisplay(
             modifier = Modifier,
-            movieDetails = movieDetails
+            movieDetails = movieDetails,
+            onSelectionChange = {
+                onRegionSelectionChange(it)
+            }
         )
+
         Column(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp)

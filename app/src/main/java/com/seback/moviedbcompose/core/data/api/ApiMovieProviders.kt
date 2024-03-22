@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ApiMovieProviders(
     @SerializedName("id") val id: Int,
-    @SerializedName("results") val resultsInCountry: ApiMovieProviderResultsInCountry
+    @SerializedName("results") val resultsInCountry: Map<String, ApiMovieProviderData>
 )
 
 data class ApiMovieProviderResultsInCountry(

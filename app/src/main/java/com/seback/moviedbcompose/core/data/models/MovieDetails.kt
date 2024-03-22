@@ -3,6 +3,7 @@ package com.seback.moviedbcompose.core.data.models
 import com.seback.moviedbcompose.core.data.api.ApiMovieDetails
 import com.seback.moviedbcompose.core.data.api.ApiMovieProvider
 import com.seback.moviedbcompose.core.data.api.ApiMovieVideo
+import com.seback.moviedbcompose.core.data.api.ApiRegion
 import kotlinx.datetime.LocalDate
 
 data class MovieDetails(
@@ -15,7 +16,8 @@ data class MovieDetails(
     val releaseDate: LocalDate = LocalDate.parse("1999-01-01"),
     val youTubeVideosIds: List<String> = emptyList(),
     val providers: List<MovieProvider> = emptyList(),
-    val moreInfoUrl: String = ""
+    val moreInfoUrl: String = "",
+    val regions: List<MovieRegion> = emptyList()
 ) {
     fun toMovie() = Movie(
         id,
@@ -32,7 +34,8 @@ fun ApiMovieDetails.map(
     flatRateProviders: List<ApiMovieProvider>,
     rentProviders: List<ApiMovieProvider>,
     buyProviders: List<ApiMovieProvider>,
-    link: String
+    link: String,
+    regionsResult: List<ApiRegion>
 ): MovieDetails =
     MovieDetails(
         id,
@@ -46,7 +49,8 @@ fun ApiMovieDetails.map(
         flatRateProviders.map { it.map(MovieProviderType.FLATRATE) } +
                 rentProviders.map { it.map(MovieProviderType.RENT) } +
                 buyProviders.map { it.map(MovieProviderType.BUY) },
-        moreInfoUrl = link
+        moreInfoUrl = link,
+        regionsResult.map { it.map() }
     )
 
 fun ApiMovieProvider.map(type: MovieProviderType): MovieProvider = MovieProvider(

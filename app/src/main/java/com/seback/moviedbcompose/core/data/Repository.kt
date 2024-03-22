@@ -3,6 +3,7 @@ package com.seback.moviedbcompose.core.data
 import com.seback.moviedbcompose.core.data.models.Genre
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.MovieDetails
+import com.seback.moviedbcompose.core.data.models.MovieRegion
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.discover.data.DiscoverOptions
 import com.seback.moviedbcompose.ui.data.SortOption
@@ -40,7 +41,7 @@ interface Repository {
     }
 
     interface Details {
-        fun fetch(id: Int): Flow<Response<MovieDetails>>
+        fun fetch(id: Int, region: MovieRegion): Flow<Response<MovieDetails>>
     }
 
     interface Favourites {

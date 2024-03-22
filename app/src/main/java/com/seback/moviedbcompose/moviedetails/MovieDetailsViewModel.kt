@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seback.moviedbcompose.core.data.models.MovieDetails
+import com.seback.moviedbcompose.core.data.models.MovieRegion
 import com.seback.moviedbcompose.core.data.models.Response
 import com.seback.moviedbcompose.favs.data.FavMovieUseCase
 import com.seback.moviedbcompose.moviedetails.usecases.GetMovieDetailsUseCase
@@ -39,9 +40,9 @@ class MovieDetailsViewModel @Inject constructor(
         fetch()
     }
 
-    private fun fetch() {
+    private fun fetch(region: MovieRegion = MovieRegion("PL", "Poland", "Polska")) { // TODO
         viewModelScope.launch {
-            getUseCase.execute(movieId)
+            getUseCase.execute(movieId, region)
                 .flowOn(Dispatchers.IO)
                 .collect {
                     _result.value = it
@@ -58,5 +59,9 @@ class MovieDetailsViewModel @Inject constructor(
                 _isFav.value = favMovieUseCase.isFav(movieId)
             }
         }
+    }
+
+    fun onRegionSelectionChange(region: MovieRegion) {
+        fetch(region)
     }
 }
