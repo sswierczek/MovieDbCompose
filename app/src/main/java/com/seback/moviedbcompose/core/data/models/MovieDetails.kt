@@ -14,7 +14,8 @@ data class MovieDetails(
     val vote: Double = 0.0,
     val releaseDate: LocalDate = LocalDate.parse("1999-01-01"),
     val youTubeVideosIds: List<String> = emptyList(),
-    val providers: List<MovieProvider> = emptyList()
+    val providers: List<MovieProvider> = emptyList(),
+    val moreInfoUrl: String = ""
 ) {
     fun toMovie() = Movie(
         id,
@@ -28,8 +29,10 @@ data class MovieDetails(
 
 fun ApiMovieDetails.map(
     videos: List<ApiMovieVideo>,
+    flatRateProviders: List<ApiMovieProvider>,
     rentProviders: List<ApiMovieProvider>,
-    buyProviders: List<ApiMovieProvider>
+    buyProviders: List<ApiMovieProvider>,
+    link: String
 ): MovieDetails =
     MovieDetails(
         id,
@@ -40,7 +43,10 @@ fun ApiMovieDetails.map(
         voteAverage,
         LocalDate.parse(releaseDate),
         videos.filter { it.isFromYouTube() && it.isTrailer() && it.official }.map { it.videoKey },
-        rentProviders.map { it.map(MovieProviderType.RENT) } + buyProviders.map { it.map(MovieProviderType.BUY) }
+        flatRateProviders.map { it.map(MovieProviderType.FLATRATE) } +
+                rentProviders.map { it.map(MovieProviderType.RENT) } +
+                buyProviders.map { it.map(MovieProviderType.BUY) },
+        moreInfoUrl = link
     )
 
 fun ApiMovieProvider.map(type: MovieProviderType): MovieProvider = MovieProvider(

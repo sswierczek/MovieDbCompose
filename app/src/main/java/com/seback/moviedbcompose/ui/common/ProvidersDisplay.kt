@@ -33,29 +33,31 @@ fun ProvidersDisplay(modifier: Modifier, movieDetails: MovieDetails) {
                 style = MaterialTheme.typography.subtitle1
             )
         } else {
-            val buy = movieDetails.providers.filter { it.type == MovieProviderType.BUY }
-            if (buy.isNotEmpty()) {
+            val flatrate = movieDetails.providers.filter { it.type == MovieProviderType.FLATRATE }
+            if (flatrate.isNotEmpty()) {
                 Text(
                     modifier = Modifier
-                        .paddingFromBaseline(bottom = 16.dp),
-                    text = "To buy:"
+                        .paddingFromBaseline(top = 16.dp),
+                    text = "Subscription:"
                 )
-
                 FlowRow {
-                    for (provider in buy) {
+                    for (provider in flatrate) {
                         ProviderLogo(provider)
                     }
                 }
             }
-            val rent = movieDetails.providers.filter { it.type == MovieProviderType.RENT }
-            if (rent.isNotEmpty()) {
+            val toBuyOrRent =
+                movieDetails.providers.filter { it.type == MovieProviderType.BUY || it.type == MovieProviderType.RENT }
+                    .distinctBy { it.id }
+            if (toBuyOrRent.isNotEmpty()) {
                 Text(
                     modifier = Modifier
-                        .paddingFromBaseline(bottom = 16.dp),
-                    text = "To rent:"
+                        .paddingFromBaseline(top = 16.dp),
+                    text = "To buy or rent:"
                 )
+
                 FlowRow {
-                    for (provider in rent) {
+                    for (provider in toBuyOrRent) {
                         ProviderLogo(provider)
                     }
                 }

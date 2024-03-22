@@ -9,5 +9,6 @@ data class MovieProvider(
 
 enum class MovieProviderType {
     RENT,
-    BUY
+    BUY,
+    FLATRATE,
 }

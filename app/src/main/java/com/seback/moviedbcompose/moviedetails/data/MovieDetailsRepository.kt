@@ -35,7 +35,9 @@ class MovieDetailsRepository(
                         movie.map(
                             videos = videos,
                             rentProviders = providers?.rent ?: emptyList(),
-                            buyProviders = providers?.buy ?: emptyList()
+                            buyProviders = providers?.buy ?: emptyList(),
+                            flatRateProviders = providers?.flatrate ?: emptyList(),
+                            link = providers?.link ?: ""
                         )
                     )
                 )

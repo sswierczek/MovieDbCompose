@@ -24,6 +24,7 @@ import com.seback.moviedbcompose.R
 import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.MovieDetails
 import com.seback.moviedbcompose.thirdparty.youtube.YouTubePlayer
+import com.seback.moviedbcompose.ui.common.ClickableUrl
 import com.seback.moviedbcompose.ui.common.FavouriteButton
 import com.seback.moviedbcompose.ui.common.ProvidersDisplay
 import com.seback.moviedbcompose.ui.common.Rating
@@ -80,6 +81,14 @@ fun MovieDetails(
             textAlign = TextAlign.Justify,
             style = MaterialTheme.typography.body1
         )
+        if (movieDetails.moreInfoUrl.isNotEmpty()) {
+            ClickableUrl(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp),
+                text = "More info",
+                url = movieDetails.moreInfoUrl
+            )
+        }
         ProvidersDisplay(
             modifier = Modifier,
             movieDetails = movieDetails
