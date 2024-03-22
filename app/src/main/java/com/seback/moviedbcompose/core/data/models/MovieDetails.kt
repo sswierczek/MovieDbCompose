@@ -1,6 +1,7 @@
 package com.seback.moviedbcompose.core.data.models
 
 import com.seback.moviedbcompose.core.data.api.ApiMovieDetails
+import com.seback.moviedbcompose.core.data.api.ApiMovieProvider
 import com.seback.moviedbcompose.core.data.api.ApiMovieVideo
 import kotlinx.datetime.LocalDate
 
@@ -12,7 +13,8 @@ data class MovieDetails(
     val posterPath: String = "",
     val vote: Double = 0.0,
     val releaseDate: LocalDate = LocalDate.parse("1999-01-01"),
-    val youTubeVideosIds: List<String> = emptyList()
+    val youTubeVideosIds: List<String> = emptyList(),
+    val providers: List<MovieProvider> = emptyList()
 ) {
     fun toMovie() = Movie(
         id,
@@ -24,7 +26,11 @@ data class MovieDetails(
     )
 }
 
-fun ApiMovieDetails.map(videos: List<ApiMovieVideo>): MovieDetails =
+fun ApiMovieDetails.map(
+    videos: List<ApiMovieVideo>,
+    rentProviders: List<ApiMovieProvider>,
+    buyProviders: List<ApiMovieProvider>
+): MovieDetails =
     MovieDetails(
         id,
         title,
@@ -33,5 +39,13 @@ fun ApiMovieDetails.map(videos: List<ApiMovieVideo>): MovieDetails =
         "https://image.tmdb.org/t/p/w500$posterPath",
         voteAverage,
         LocalDate.parse(releaseDate),
-        videos.filter { it.isFromYouTube() && it.isTrailer() && it.official }.map { it.videoKey }
+        videos.filter { it.isFromYouTube() && it.isTrailer() && it.official }.map { it.videoKey },
+        rentProviders.map { it.map(MovieProviderType.RENT) } + buyProviders.map { it.map(MovieProviderType.BUY) }
     )
+
+fun ApiMovieProvider.map(type: MovieProviderType): MovieProvider = MovieProvider(
+    id = providerId,
+    logoPath = "https://image.tmdb.org/t/p/original$logoPath",
+    name = providerName,
+    type = type
+)

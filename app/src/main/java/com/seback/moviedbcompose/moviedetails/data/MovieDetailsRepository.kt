@@ -3,6 +3,7 @@ package com.seback.moviedbcompose.moviedetails.data
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.seback.moviedbcompose.core.data.Repository
 import com.seback.moviedbcompose.core.data.api.ApiMovieDetails
+import com.seback.moviedbcompose.core.data.api.ApiMovieProviderData
 import com.seback.moviedbcompose.core.data.api.ApiMovieVideo
 import com.seback.moviedbcompose.core.data.models.MovieDetails
 import com.seback.moviedbcompose.core.data.models.Response
@@ -28,7 +29,16 @@ class MovieDetailsRepository(
             is NetworkResponse.Success -> {
                 val movie = response.body
                 val videos = videosForMovie(movie)
-                emit(Response.Success(movie.map(videos)))
+                val providers = providersForMovie(movie)
+                emit(
+                    Response.Success(
+                        movie.map(
+                            videos = videos,
+                            rentProviders = providers?.rent ?: emptyList(),
+                            buyProviders = providers?.buy ?: emptyList()
+                        )
+                    )
+                )
             }
 
             is NetworkResponse.Error -> {
@@ -50,4 +60,14 @@ class MovieDetailsRepository(
         }
 
     }
+
+    private suspend fun providersForMovie(movie: ApiMovieDetails): ApiMovieProviderData? {
+        val videosResponse = service.movieProviders(apiKey = networkConfig.apiKey, movieId = movie.id)
+        return if (videosResponse is NetworkResponse.Success) {
+            videosResponse.body.resultsInCountry.resultsInPoland
+        } else {
+            null
+        }
+    }
+
 }

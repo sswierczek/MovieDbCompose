@@ -42,7 +42,7 @@ fun SearchScreen(
         SortButton(
             modifier = Modifier
                 .align(Alignment.End)
-                .padding(end = 24.dp),
+                .padding(end = 24.dp, top = 24.dp),
             text = "Sort by",
             selectedSortOrder = selectedSortOrder.value,
             onSelectedSortOrderChange = { newOrder ->

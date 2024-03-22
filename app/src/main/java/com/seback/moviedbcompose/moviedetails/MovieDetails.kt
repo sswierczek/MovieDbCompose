@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -26,6 +25,7 @@ import com.seback.moviedbcompose.core.data.models.Movie
 import com.seback.moviedbcompose.core.data.models.MovieDetails
 import com.seback.moviedbcompose.thirdparty.youtube.YouTubePlayer
 import com.seback.moviedbcompose.ui.common.FavouriteButton
+import com.seback.moviedbcompose.ui.common.ProvidersDisplay
 import com.seback.moviedbcompose.ui.common.Rating
 
 @Composable
@@ -80,11 +80,9 @@ fun MovieDetails(
             textAlign = TextAlign.Justify,
             style = MaterialTheme.typography.body1
         )
-        Text(
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
-                .paddingFromBaseline(bottom = 16.dp),
-            text = stringResource(id = R.string.trailers)
+        ProvidersDisplay(
+            modifier = Modifier,
+            movieDetails = movieDetails
         )
         Column(
             modifier = Modifier
