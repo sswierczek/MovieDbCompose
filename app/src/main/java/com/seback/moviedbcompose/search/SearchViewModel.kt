@@ -11,6 +11,7 @@ import com.seback.moviedbcompose.search.usecases.SearchUseCase
 import com.seback.moviedbcompose.ui.data.SortOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -57,6 +58,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    @OptIn(FlowPreview::class)
     private fun observeSearch() {
         viewModelScope.launch {
             _searchQuery

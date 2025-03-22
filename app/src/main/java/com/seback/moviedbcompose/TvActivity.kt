@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,11 +22,7 @@ import androidx.compose.ui.tooling.preview.Devices.TV_720p
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.foundation.lazy.list.TvLazyRow
-import androidx.tv.foundation.lazy.list.items
 import androidx.tv.material3.Card
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
@@ -40,7 +38,6 @@ data class Section(
     val movieList: List<Movie>
 )
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @AndroidEntryPoint
 class TvActivity : ComponentActivity() {
 
@@ -81,12 +78,12 @@ class TvActivity : ComponentActivity() {
         modifier: Modifier = Modifier,
         onItemSelected: (Movie) -> Unit = {},
     ) {
-        TvLazyColumn(
+        LazyColumn(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(sectionList) { section ->
-                Section(section, onItemSelected = onItemSelected)
+            items(sectionList.size) { index ->
+                Section(sectionList[index], onItemSelected = onItemSelected)
             }
         }
     }
@@ -101,11 +98,12 @@ class TvActivity : ComponentActivity() {
             text = section.title,
             style = MaterialTheme.typography.headlineSmall,
         )
-        TvLazyRow(
+        LazyRow(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(section.movieList) { movie ->
+            items(section.movieList.size) { index ->
+                val movie = section.movieList[index]
                 MovieCard(
                     movie = movie,
                     onClick = { onItemSelected(movie) }
